@@ -1,23 +1,23 @@
 import { About } from "@/components/About";
+import { BottomNav } from "@/components/BottomNav";
 import { Catalog } from "@/components/Catalog";
-import { CategoryGrid } from "@/components/CategoryGrid";
-import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
+import { StoreLocation } from "@/components/StoreLocation";
 
 export default function HomePage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="pb-24 md:pb-0">
         <Hero />
-        <CategoryGrid />
         <Catalog />
         <About />
-        <Contact />
+        <StoreLocation />
       </main>
       <Footer />
+      <BottomNav />
     </>
   );
 }

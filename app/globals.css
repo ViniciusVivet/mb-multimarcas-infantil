@@ -18,6 +18,8 @@ body {
   margin: 0;
   background: #fffaf7;
   color: #24302f;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
@@ -25,28 +27,37 @@ input {
   font: inherit;
 }
 
+/* Hide scrollbar but keep scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 @layer components {
   .eyebrow {
-    @apply mb-3 text-[0.82rem] font-extrabold uppercase tracking-widest text-coral;
+    @apply mb-3 text-[0.75rem] font-extrabold uppercase tracking-widest text-coral;
   }
 
   .button {
-    @apply inline-flex min-h-12 items-center justify-center rounded-full border border-transparent px-6 py-3 text-center font-extrabold transition-all duration-200;
+    @apply inline-flex min-h-11 items-center justify-center rounded-full border border-transparent px-5 py-2.5 text-center font-extrabold transition-all duration-200;
   }
 
   .button-primary {
-    @apply bg-coral text-white shadow-md hover:bg-[#d95749] hover:shadow-lg hover:-translate-y-0.5;
+    @apply bg-coral text-white shadow-md hover:bg-[#d95749] active:scale-95;
   }
 
   .button-secondary {
-    @apply bg-white text-ink shadow-md hover:bg-paper hover:-translate-y-0.5;
+    @apply bg-white text-ink shadow-md hover:bg-paper active:scale-95;
   }
 
   .button-outline {
-    @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-white;
+    @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-white active:scale-95;
   }
 
   .button-whatsapp {
-    @apply bg-[#25D366] text-white shadow-md hover:bg-[#1ebe5c] hover:shadow-lg hover:-translate-y-0.5;
+    @apply bg-[#25D366] text-white shadow-md hover:bg-[#1ebe5c] active:scale-95;
   }
 }
