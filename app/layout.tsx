@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+import { Nunito } from "next/font/google";
 import "./globals.css";
+
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mbmultimarcasinfantil.com.br"),
@@ -8,11 +14,11 @@ export const metadata: Metadata = {
     template: "%s | MB Multimarcas Infantil",
   },
   description:
-    "Catalogo online da MB Multimarcas Infantil com roupas infantis, conjuntos, vestidos e pecas para bebe. Atendimento direto pelo WhatsApp.",
+    "Catálogo online da MB Multimarcas Infantil com roupas infantis, conjuntos, vestidos e peças para bebê. Atendimento direto pelo WhatsApp.",
   openGraph: {
     title: "MB Multimarcas Infantil",
     description:
-      "Conheca o catalogo da MB Multimarcas Infantil e chame no WhatsApp para consultar disponibilidade.",
+      "Conheça o catálogo da MB Multimarcas Infantil e chame no WhatsApp para consultar disponibilidade.",
     type: "website",
     images: [
       {
@@ -36,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body className={nunito.className}>{children}</body>
     </html>
   );
 }

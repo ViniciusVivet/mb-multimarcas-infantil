@@ -2,6 +2,17 @@
 
 import { categories, categoryDescriptions } from "@/data/products";
 
+const categoryConfig: Record<string, { emoji: string; bg: string; accent: string }> = {
+  Vestidos:     { emoji: "👗", bg: "bg-rose/10 hover:bg-rose/20 border-rose/30",       accent: "text-[#c0445a]" },
+  Conjuntos:    { emoji: "👚", bg: "bg-mint/10 hover:bg-mint/20 border-mint/30",       accent: "text-[#2a8c7a]" },
+  "Bebê":       { emoji: "🍼", bg: "bg-sun/10 hover:bg-sun/20 border-sun/30",          accent: "text-[#b07b00]" },
+  Meninas:      { emoji: "🎀", bg: "bg-rose/10 hover:bg-rose/20 border-rose/30",       accent: "text-[#c0445a]" },
+  Meninos:      { emoji: "⚽", bg: "bg-mint/10 hover:bg-mint/20 border-mint/30",       accent: "text-[#2a8c7a]" },
+  "Acessórios": { emoji: "✨", bg: "bg-coral/10 hover:bg-coral/20 border-coral/30",    accent: "text-coral" },
+};
+
+const defaultConfig = { emoji: "🛍️", bg: "bg-paper hover:bg-line/30 border-line", accent: "text-coral" };
+
 export function CategoryGrid() {
   function goToCategory(category: string) {
     const url = new URL(window.location.href);
@@ -14,24 +25,28 @@ export function CategoryGrid() {
 
   return (
     <section className="px-5 py-16 sm:px-10 lg:px-16 lg:py-24" aria-labelledby="categorias-title">
-      <div className="mb-8 max-w-3xl">
+      <div className="mb-10 max-w-3xl">
         <p className="eyebrow">Escolha por categoria</p>
-        <h2 id="categorias-title" className="text-[clamp(2rem,4vw,3.4rem)] font-black leading-none tracking-normal">
-          Pecas para cada fase e ocasiao.
+        <h2 id="categorias-title" className="text-[clamp(2rem,4vw,3.4rem)] font-black leading-none tracking-tight">
+          Peças para cada fase e ocasião. 🌈
         </h2>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {categories.map((category) => (
-          <button
-            key={category}
-            className="min-h-40 rounded-lg border border-line bg-white p-5 text-left shadow-soft transition hover:-translate-y-1 hover:border-coral"
-            type="button"
-            onClick={() => goToCategory(category)}
-          >
-            <strong className="mb-2 block text-lg">{category}</strong>
-            <span className="leading-6 text-muted">{categoryDescriptions[category]}</span>
-          </button>
-        ))}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        {categories.map((category) => {
+          const config = categoryConfig[category] ?? defaultConfig;
+          return (
+            <button
+              key={category}
+              className={`group flex flex-col items-start min-h-36 rounded-3xl border-2 p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-soft ${config.bg}`}
+              type="button"
+              onClick={() => goToCategory(category)}
+            >
+              <span className="mb-3 text-3xl">{config.emoji}</span>
+              <strong className={`block text-base font-extrabold ${config.accent}`}>{category}</strong>
+              <span className="mt-1 text-sm leading-5 text-muted">{categoryDescriptions[category]}</span>
+            </button>
+          );
+        })}
       </div>
     </section>
   );

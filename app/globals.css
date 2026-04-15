@@ -27,22 +27,26 @@ input {
 
 @layer components {
   .eyebrow {
-    @apply mb-3 text-[0.82rem] font-black uppercase tracking-normal text-coral;
+    @apply mb-3 text-[0.82rem] font-extrabold uppercase tracking-widest text-coral;
   }
 
   .button {
-    @apply inline-flex min-h-12 items-center justify-center rounded-lg border border-transparent px-5 py-3 text-center font-black transition;
+    @apply inline-flex min-h-12 items-center justify-center rounded-full border border-transparent px-6 py-3 text-center font-extrabold transition-all duration-200;
   }
 
   .button-primary {
-    @apply bg-coral text-white hover:bg-[#d95749];
+    @apply bg-coral text-white shadow-md hover:bg-[#d95749] hover:shadow-lg hover:-translate-y-0.5;
   }
 
   .button-secondary {
-    @apply bg-white text-ink hover:bg-paper;
+    @apply bg-white text-ink shadow-md hover:bg-paper hover:-translate-y-0.5;
   }
 
   .button-outline {
-    @apply border-ink bg-transparent text-ink hover:bg-ink hover:text-white;
+    @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-white;
+  }
+
+  .button-whatsapp {
+    @apply bg-[#25D366] text-white shadow-md hover:bg-[#1ebe5c] hover:shadow-lg hover:-translate-y-0.5;
   }
 }
