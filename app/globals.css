@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fffaf7;
+  color: #24302f;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+@layer components {
+  .eyebrow {
+    @apply mb-3 text-[0.82rem] font-black uppercase tracking-normal text-coral;
+  }
+
+  .button {
+    @apply inline-flex min-h-12 items-center justify-center rounded-lg border border-transparent px-5 py-3 text-center font-black transition;
+  }
+
+  .button-primary {
+    @apply bg-coral text-white hover:bg-[#d95749];
+  }
+
+  .button-secondary {
+    @apply bg-white text-ink hover:bg-paper;
+  }
+
+  .button-outline {
+    @apply border-ink bg-transparent text-ink hover:bg-ink hover:text-white;
+  }
+}
