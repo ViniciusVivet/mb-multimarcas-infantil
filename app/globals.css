@@ -36,6 +36,13 @@ input {
   display: none;
 }
 
+/* Fundo do catálogo — creme quente com pontilhado sutil */
+.catalog-bg {
+  background-color: #f7f1ec;
+  background-image: radial-gradient(circle, #e2d5cb 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
 @layer components {
   .eyebrow {
     @apply mb-3 text-[0.75rem] font-extrabold uppercase tracking-widest text-coral;

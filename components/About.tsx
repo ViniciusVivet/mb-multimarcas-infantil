@@ -3,7 +3,7 @@ import { getWhatsappLink } from "@/data/store";
 
 export function About() {
   return (
-    <section id="sobre" className="grid min-h-[580px] bg-gradient-to-br from-rose/10 via-paper to-mint/10 lg:grid-cols-2">
+    <section id="sobre" className="grid min-h-[580px] bg-gradient-to-br from-[#fde8ec] via-[#fff6f8] to-[#e8f6f3] lg:grid-cols-2">
       <div className="self-center px-5 py-14 sm:px-10 lg:px-16">
         <p className="eyebrow">Quem somos</p>
         <h2 className="text-[clamp(2rem,4vw,3.4rem)] font-black leading-tight tracking-tight">
