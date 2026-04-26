@@ -3,11 +3,11 @@
 import { categories, categoryDescriptions } from "@/data/products";
 
 const categoryConfig: Record<string, { emoji: string; bg: string; accent: string }> = {
-  Vestidos:     { emoji: "👗", bg: "bg-rose/10 hover:bg-rose/20 border-rose/30",       accent: "text-[#c0445a]" },
-  Conjuntos:    { emoji: "👚", bg: "bg-mint/10 hover:bg-mint/20 border-mint/30",       accent: "text-[#2a8c7a]" },
-  "Bebê":       { emoji: "🍼", bg: "bg-sun/10 hover:bg-sun/20 border-sun/30",          accent: "text-[#b07b00]" },
-  Meninas:      { emoji: "🎀", bg: "bg-rose/10 hover:bg-rose/20 border-rose/30",       accent: "text-[#c0445a]" },
-  Meninos:      { emoji: "⚽", bg: "bg-mint/10 hover:bg-mint/20 border-mint/30",       accent: "text-[#2a8c7a]" },
+  Vestidos:     { emoji: "👗", bg: "bg-rose/10 hover:bg-rose/20 border-rose/30",       accent: "text-coral" },
+  Conjuntos:    { emoji: "👚", bg: "bg-mint/10 hover:bg-mint/20 border-mint/30",       accent: "text-mint" },
+  "Bebê":       { emoji: "🍼", bg: "bg-sun/10 hover:bg-sun/20 border-sun/30",          accent: "text-[#a07000]" },
+  Meninas:      { emoji: "🎀", bg: "bg-rose/10 hover:bg-rose/20 border-rose/30",       accent: "text-coral" },
+  Meninos:      { emoji: "⚽", bg: "bg-mint/10 hover:bg-mint/20 border-mint/30",       accent: "text-mint" },
   "Acessórios": { emoji: "✨", bg: "bg-coral/10 hover:bg-coral/20 border-coral/30",    accent: "text-coral" },
 };
 

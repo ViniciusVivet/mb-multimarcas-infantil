@@ -49,7 +49,7 @@ export default function ProductPage({ params }: Props) {
           <div className="px-4 py-8 sm:px-8 lg:px-12 lg:py-14">
             <Link
               href="/#catalogo"
-              className="mb-5 inline-flex items-center gap-1.5 text-sm font-bold text-coral hover:text-[#d95749] transition-colors"
+              className="mb-5 inline-flex items-center gap-1.5 text-sm font-bold text-coral hover:text-[#b02858] transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <polyline points="15 18 9 12 15 6"/>
@@ -77,15 +77,15 @@ export default function ProductPage({ params }: Props) {
             </div>
 
             {/* Aviso */}
-            <div className="mt-4 rounded-2xl bg-[#e8f6f1] px-4 py-3 border border-mint/30">
-              <p className="text-sm font-semibold text-[#2a8c7a]">
+            <div className="mt-4 rounded-2xl bg-mint/10 px-4 py-3 border border-mint/30">
+              <p className="text-sm font-semibold text-mint">
                 💬 Chame no WhatsApp para confirmar disponibilidade e combinar a entrega!
               </p>
             </div>
 
             {/* CTA desktop */}
             <a
-              className="button button-whatsapp mt-6 hidden w-full justify-center gap-2 text-base md:inline-flex"
+              className="button button-primary mt-6 hidden w-full justify-center gap-2 text-base md:inline-flex"
               href={getWhatsappLink(product.name)}
               target="_blank"
               rel="noreferrer"
@@ -120,7 +120,7 @@ export default function ProductPage({ params }: Props) {
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur-xl md:hidden"
            style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
         <a
-          className="button button-whatsapp w-full justify-center gap-2"
+          className="button button-primary w-full justify-center gap-2"
           href={getWhatsappLink(product.name)}
           target="_blank"
           rel="noreferrer"

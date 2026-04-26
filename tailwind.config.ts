@@ -10,13 +10,13 @@ const config: Config = {
     extend: {
       colors: {
         ink: "#1e2040",
-        muted: "#7a6070",
-        paper: "#fff3f7",
-        mint: "#5dcfca",
-        rose: "#f3a6b5",
-        coral: "#ee6c5d",
+        muted: "#6b5572",
+        paper: "#fef0f6",
+        mint: "#3ecfc8",
+        rose: "#f5a0c0",
+        coral: "#d6366e",
         sun: "#ffd66b",
-        line: "#f0d5e2"
+        line: "#f2d4e8"
       },
       boxShadow: {
         soft: "0 16px 40px rgba(30, 32, 64, 0.12)"

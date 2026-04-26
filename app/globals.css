@@ -16,7 +16,7 @@ html {
 
 body {
   margin: 0;
-  background: #fff3f7;
+  background: #fef0f6;
   color: #1e2040;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -53,7 +53,7 @@ input {
   }
 
   .button-primary {
-    @apply bg-coral text-white shadow-md hover:bg-[#d95749] active:scale-95;
+    @apply bg-coral text-white shadow-md hover:bg-[#b02858] active:scale-95;
   }
 
   .button-secondary {
