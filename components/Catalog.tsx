@@ -85,7 +85,7 @@ export function Catalog() {
       </div>
 
       {/* Pills de categoria — sticky, scroll horizontal */}
-      <div className="sticky top-[64px] z-30 bg-[#f7f1ec]/95 backdrop-blur-md shadow-sm md:top-[76px]">
+      <div className="sticky top-[64px] z-30 bg-[#e8f6f9]/95 backdrop-blur-md shadow-sm md:top-[76px]">
         <div
           ref={pillsRef}
           className="scrollbar-hide flex gap-2 overflow-x-auto px-4 py-3 sm:px-10 lg:px-16"

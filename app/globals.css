@@ -16,7 +16,7 @@ html {
 
 body {
   margin: 0;
-  background: #fffaf7;
+  background: #fff3f7;
   color: #24302f;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,10 +36,10 @@ input {
   display: none;
 }
 
-/* Fundo do catálogo — creme quente com pontilhado sutil */
+/* Fundo do catálogo — azul clarinho com pontilhado sutil */
 .catalog-bg {
-  background-color: #f7f1ec;
-  background-image: radial-gradient(circle, #e2d5cb 1px, transparent 1px);
+  background-color: #e8f6f9;
+  background-image: radial-gradient(circle, #b8dde8 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
