@@ -32,7 +32,7 @@ export function Header() {
 
       {/* Desktop WhatsApp button */}
       <a
-        className="button button-whatsapp hidden px-4 py-2 text-sm gap-2 md:inline-flex"
+        className="button button-primary hidden px-4 py-2 text-sm gap-2 md:inline-flex"
         href={getWhatsappLink()}
         target="_blank"
         rel="noreferrer"

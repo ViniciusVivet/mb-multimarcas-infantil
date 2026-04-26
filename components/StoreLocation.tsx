@@ -52,11 +52,11 @@ export function StoreLocation() {
 
             <div className="rounded-3xl bg-white/8 border border-white/10 p-6">
               <div className="mb-3 flex items-center gap-3">
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/20 text-xl">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-coral/20 text-xl">
                   💬
                 </div>
                 <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#25D366]">WhatsApp</p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-coral">WhatsApp</p>
                   <p className="mt-0.5 font-extrabold text-white">Atendimento online</p>
                 </div>
               </div>
@@ -67,7 +67,7 @@ export function StoreLocation() {
                 href={getWhatsappLink()}
                 target="_blank"
                 rel="noreferrer"
-                className="button button-whatsapp mt-4 w-full justify-center text-sm"
+                className="button button-primary mt-4 w-full justify-center text-sm"
               >
                 Falar no WhatsApp
               </a>
