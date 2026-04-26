@@ -43,7 +43,7 @@ export function ProductCard({ product }: Props) {
           </span>
         </div>
         <a
-          className="button button-whatsapp mt-2.5 w-full justify-center text-xs py-2 px-3 min-h-9 gap-1.5"
+          className="button button-primary mt-2.5 w-full justify-center text-xs py-2 px-3 min-h-9 gap-1.5"
           href={getWhatsappLink(product.name)}
           target="_blank"
           rel="noreferrer"

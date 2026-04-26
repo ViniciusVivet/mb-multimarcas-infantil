@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#24302f",
+        ink: "#1e2040",
         muted: "#7a6070",
         paper: "#fff3f7",
         mint: "#5dcfca",
@@ -19,7 +19,7 @@ const config: Config = {
         line: "#f0d5e2"
       },
       boxShadow: {
-        soft: "0 16px 40px rgba(36, 48, 47, 0.12)"
+        soft: "0 16px 40px rgba(30, 32, 64, 0.12)"
       }
     }
   },
