@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next";
-import { products } from "@/data/products";
+import { getProducts } from "@/lib/products-db";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://mbmultimarcasinfantil.com.br";
+  const products = await getProducts();
 
   return [
-    {
-      url: baseUrl,
-      priority: 1,
-    },
+    { url: baseUrl, priority: 1 },
     ...products.map((product) => ({
       url: `${baseUrl}/produto/${product.slug}`,
       priority: 0.8,
