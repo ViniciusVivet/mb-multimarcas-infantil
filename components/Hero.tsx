@@ -3,7 +3,7 @@ import { getWhatsappLink } from "@/data/store";
 
 export function Hero() {
   return (
-    <section id="inicio" className="relative flex min-h-[38vh] items-end overflow-hidden md:min-h-[65vh]">
+    <section id="inicio" className="relative flex min-h-[29vh] items-end overflow-hidden md:min-h-[49vh]">
       <Image
         src="/hero.png"
         alt="Crianças com roupas infantis coloridas"
