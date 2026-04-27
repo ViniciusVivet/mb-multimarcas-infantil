@@ -7,16 +7,19 @@ import { Header } from "@/components/Header";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery } from "@/components/ProductGallery";
 import { getWhatsappLink } from "@/data/store";
-import { products } from "@/data/products";
+import { products as staticProducts } from "@/data/products";
+import { getProductBySlug, getProducts } from "@/lib/products-db";
 
 type Props = { params: { slug: string } };
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  return staticProducts.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const product = products.find((p) => p.slug === params.slug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const product = await getProductBySlug(params.slug);
   if (!product) return {};
   return {
     title: product.name,
@@ -29,11 +32,14 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function ProductPage({ params }: Props) {
-  const product = products.find((p) => p.slug === params.slug);
+export default async function ProductPage({ params }: Props) {
+  const [product, allProducts] = await Promise.all([
+    getProductBySlug(params.slug),
+    getProducts(),
+  ]);
   if (!product) notFound();
 
-  const related = products
+  const related = allProducts
     .filter((p) => p.category === product.category && p.slug !== product.slug)
     .slice(0, 3);
 

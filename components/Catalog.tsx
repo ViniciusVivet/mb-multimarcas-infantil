@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { categories, products } from "@/data/products";
+import type { Product } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 
 const categoryEmojis: Record<string, string> = {
@@ -10,10 +10,20 @@ const categoryEmojis: Record<string, string> = {
   "Bebê": "🍼",
   Meninas: "🎀",
   Meninos: "⚽",
+  Camisetas: "👕",
+  "Calças": "👖",
+  "Macacões": "🐣",
+  Casacos: "🧥",
+  Shorts: "🩳",
   "Acessórios": "✨",
 };
 
-export function Catalog() {
+export function Catalog({ products }: { products: Product[] }) {
+  const categories = useMemo(
+    () => Array.from(new Set(products.map((p) => p.category))),
+    [products]
+  );
+
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [search, setSearch] = useState("");
   const [scrolled, setScrolled] = useState(false);
@@ -38,7 +48,7 @@ export function Catalog() {
     }
     window.addEventListener("category-change", handleCategoryChange);
     return () => window.removeEventListener("category-change", handleCategoryChange);
-  }, []);
+  }, [categories]);
 
   // Scroll active pill into view
   useEffect(() => {
@@ -60,7 +70,7 @@ export function Catalog() {
         p.description.toLowerCase().includes(q);
       return matchCat && matchSearch;
     });
-  }, [activeCategory, search]);
+  }, [activeCategory, search, products]);
 
   return (
     <section id="catalogo" className="catalog-bg" aria-labelledby="catalogo-title">
