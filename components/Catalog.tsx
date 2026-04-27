@@ -102,7 +102,7 @@ export function Catalog({ products }: { products: Product[] }) {
       </div>
 
       {/* Pills de categoria — sticky, scroll horizontal */}
-      <div className={`sticky z-30 bg-[#e8f6f9]/95 backdrop-blur-md shadow-sm transition-all duration-300 ${scrolled ? "top-[52px] md:top-[60px]" : "top-[64px] md:top-[76px]"}`}>
+      <div className={`sticky z-30 bg-[#e8f6f9]/95 backdrop-blur-md shadow-sm transition-[top] duration-300 ${scrolled ? "top-[52px] md:top-[60px]" : "top-[64px] md:top-[76px]"}`}>
         <div
           ref={pillsRef}
           className="scrollbar-hide flex gap-2 overflow-x-auto px-4 py-3 sm:px-10 lg:px-16"
