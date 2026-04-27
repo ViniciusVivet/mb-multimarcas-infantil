@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import type { Product } from "@/data/products";
 
 type Props = {
@@ -9,10 +9,23 @@ type Props = {
   submitLabel: string;
 };
 
-export function ProductForm({ action, defaultValues, submitLabel }: Props) {
-  const [state, formAction, pending] = useActionState(action, undefined);
+function SubmitButton({ label }: { label: string }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="button button-primary w-full py-3 text-sm font-bold disabled:opacity-60"
+    >
+      {pending ? "Salvando..." : label}
+    </button>
+  );
+}
 
-  const categories = ["Vestidos", "Conjuntos", "Camisetas", "Calças", "Macacões", "Acessórios", "Casacos", "Shorts"];
+const categories = ["Vestidos", "Conjuntos", "Camisetas", "Calças", "Macacões", "Acessórios", "Casacos", "Shorts"];
+
+export function ProductForm({ action, defaultValues, submitLabel }: Props) {
+  const [state, formAction] = useFormState(action, undefined);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -97,13 +110,7 @@ export function ProductForm({ action, defaultValues, submitLabel }: Props) {
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="button button-primary w-full py-3 text-sm font-bold disabled:opacity-60"
-      >
-        {pending ? "Salvando..." : submitLabel}
-      </button>
+      <SubmitButton label={submitLabel} />
     </form>
   );
 }

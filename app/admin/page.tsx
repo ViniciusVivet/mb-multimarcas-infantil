@@ -1,14 +1,28 @@
 "use client";
 
-import { useActionState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { loginAction } from "./actions";
 import Image from "next/image";
 
-export default function AdminLoginPage() {
-  const [state, action, pending] = useActionState(
-    (_prev: unknown, formData: FormData) => loginAction(formData),
-    undefined
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="button button-primary w-full py-3 text-sm font-bold disabled:opacity-60"
+    >
+      {pending ? "Entrando..." : "Entrar"}
+    </button>
   );
+}
+
+function wrappedLogin(_prev: unknown, formData: FormData) {
+  return loginAction(formData);
+}
+
+export default function AdminLoginPage() {
+  const [state, action] = useFormState(wrappedLogin, undefined);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
@@ -31,7 +45,7 @@ export default function AdminLoginPage() {
               required
               autoFocus
               placeholder="Digite a senha de acesso"
-              className="w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink outline-none focus:border-coral focus:ring-2 focus:ring-coral/20"
+              className="input w-full"
             />
           </div>
 
@@ -41,13 +55,7 @@ export default function AdminLoginPage() {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={pending}
-            className="button button-primary w-full py-3 text-sm font-bold disabled:opacity-60"
-          >
-            {pending ? "Entrando..." : "Entrar"}
-          </button>
+          <SubmitButton />
         </form>
       </div>
     </div>
