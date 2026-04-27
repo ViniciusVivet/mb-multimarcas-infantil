@@ -32,7 +32,7 @@ export function About() {
       </div>
       <div className="relative min-h-[400px]">
         <Image
-          src="https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=900&q=80"
+          src="/about.png"
           alt="Arara com roupas infantis coloridas"
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
