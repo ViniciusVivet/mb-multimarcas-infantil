@@ -1,13 +1,26 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { getWhatsappLink, store } from "@/data/store";
 
 export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 flex min-h-[64px] items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 backdrop-blur-xl md:min-h-[76px] md:px-10 lg:px-16">
+    <header className={`sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 backdrop-blur-xl transition-all duration-300 md:px-10 lg:px-16 ${
+      scrolled ? "min-h-[52px] shadow-soft md:min-h-[60px]" : "min-h-[64px] md:min-h-[76px]"
+    }`}>
 
       <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={store.name}>
-        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-xl shadow-sm md:h-12 md:w-12 md:rounded-2xl">
+        <div className={`relative flex-shrink-0 overflow-hidden rounded-xl shadow-sm transition-all duration-300 md:rounded-2xl ${scrolled ? "h-8 w-8 md:h-9 md:w-9" : "h-10 w-10 md:h-12 md:w-12"}`}>
           <Image
             src="/logo.jpg"
             alt="MB Multimarcas Infantil"
