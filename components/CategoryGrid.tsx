@@ -24,14 +24,14 @@ export function CategoryGrid() {
   }
 
   return (
-    <section className="px-5 py-16 sm:px-10 lg:px-16 lg:py-24" aria-labelledby="categorias-title">
+    <section className="px-5 py-10 sm:px-10 lg:px-16 lg:py-24" aria-labelledby="categorias-title">
       <div className="mb-10 max-w-3xl">
         <p className="eyebrow">Escolha por categoria</p>
         <h2 id="categorias-title" className="text-[clamp(2rem,4vw,3.4rem)] font-black leading-none tracking-tight">
           Peças para cada fase e ocasião. 🌈
         </h2>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
         {categories.map((category) => {
           const config = categoryConfig[category] ?? defaultConfig;
           return (

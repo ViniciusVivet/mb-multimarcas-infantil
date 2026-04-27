@@ -3,7 +3,7 @@ import { getWhatsappLink } from "@/data/store";
 
 export function Hero() {
   return (
-    <section id="inicio" className="relative flex min-h-[29vh] items-end overflow-hidden md:min-h-[49vh]">
+    <section id="inicio" className="relative flex min-h-[35vh] items-end overflow-hidden md:min-h-[49vh]">
       <Image
         src="/hero.png"
         alt="Crianças com roupas infantis coloridas"
@@ -24,7 +24,7 @@ export function Hero() {
           Looks fofos que as crianças amam.
         </h1>
 
-        <div className="mt-4 flex flex-wrap gap-2.5">
+        <div className="mt-4 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
           <a className="button button-primary px-5 py-2.5 text-sm md:px-6 md:py-3 md:text-base" href="#catalogo">
             Ver catálogo 🛍️
           </a>
