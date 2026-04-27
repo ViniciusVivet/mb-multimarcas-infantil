@@ -1,9 +1,19 @@
+import Image from "next/image";
 import { getWhatsappLink, store } from "@/data/store";
 
 export function Contact() {
   return (
-    <section id="contato" className="px-5 py-16 sm:px-10 lg:px-16 lg:py-24" aria-labelledby="contato-title">
-      <div className="mx-auto max-w-2xl rounded-3xl bg-gradient-to-br from-coral/90 to-[#b02858] p-10 text-center text-white shadow-soft">
+    <section id="contato" className="relative overflow-hidden px-5 py-16 sm:px-10 lg:px-16 lg:py-24" aria-labelledby="contato-title">
+      {/* Pattern de fundo */}
+      <Image
+        src="/pattern.png"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover opacity-30"
+        aria-hidden="true"
+      />
+      <div className="relative mx-auto max-w-2xl rounded-3xl bg-gradient-to-br from-coral/90 to-[#b02858] p-10 text-center text-white shadow-soft">
         <p className="mb-2 text-sm font-extrabold uppercase tracking-widest text-white/70">Atendimento</p>
         <h2 id="contato-title" className="text-[clamp(1.8rem,4vw,3rem)] font-black leading-tight">
           Gostou de alguma peça? ✨
