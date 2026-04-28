@@ -66,7 +66,8 @@ export async function updateProduct(
 export async function deleteProduct(slug: string): Promise<{ ok: boolean; error?: string }> {
   const db = getSupabaseClient();
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
-  const { error } = await db.from("produtos").delete().eq("slug", slug);
+  const { error, count } = await db.from("produtos").delete({ count: "exact" }).eq("slug", slug);
   if (error) return { ok: false, error: error.message };
+  if (count === 0) return { ok: false, error: "Produto não encontrado no banco. Edite e salve ele primeiro para migrá-lo." };
   return { ok: true };
 }

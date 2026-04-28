@@ -5,7 +5,8 @@ import { deletarProdutoAction } from "../actions";
 export function DeleteButton({ slug, name }: { slug: string; name: string }) {
   async function handleDelete() {
     if (!confirm(`Excluir "${name}"?`)) return;
-    await deletarProdutoAction(slug);
+    const result = await deletarProdutoAction(slug);
+    if (result?.error) alert(`Não foi possível excluir: ${result.error}`);
   }
 
   return (

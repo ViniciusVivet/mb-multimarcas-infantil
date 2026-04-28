@@ -107,10 +107,12 @@ export async function atualizarProdutoAction(
   redirect("/admin/produtos");
 }
 
-export async function deletarProdutoAction(slug: string) {
-  await deleteProduct(slug);
+export async function deletarProdutoAction(slug: string): Promise<{ error?: string }> {
+  const result = await deleteProduct(slug);
+  if (!result.ok) return { error: result.error };
   revalidatePath("/");
   revalidatePath("/admin/produtos");
+  return {};
 }
 
 export async function updatePositionsAction(slugs: string[]) {
