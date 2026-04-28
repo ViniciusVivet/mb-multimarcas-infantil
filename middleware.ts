@@ -1,12 +1,22 @@
-import { createHmac } from "crypto";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-function deriveSessionToken(password: string) {
-  return createHmac("sha256", password).update("mb-admin-session-v1").digest("hex");
+async function deriveSessionToken(password: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(password),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode("mb-admin-session-v1"));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/admin") && pathname !== "/admin") {
@@ -16,7 +26,9 @@ export function middleware(request: NextRequest) {
     }
 
     const session = request.cookies.get("mb_admin_session")?.value;
-    if (session !== deriveSessionToken(adminPassword)) {
+    const expected = await deriveSessionToken(adminPassword);
+
+    if (session !== expected) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
