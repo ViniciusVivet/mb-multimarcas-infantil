@@ -1,5 +1,6 @@
 "use server";
 
+import { createHmac } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -7,15 +8,23 @@ import { createProduct, updateProduct, deleteProduct } from "@/lib/products-db";
 
 // ── Auth ────────────────────────────────────────────────────────────────────
 
+function deriveSessionToken(password: string) {
+  return createHmac("sha256", password).update("mb-admin-session-v1").digest("hex");
+}
+
 export async function loginAction(formData: FormData) {
   const password = formData.get("password") as string;
-  const adminPassword = process.env.ADMIN_PASSWORD ?? "admin123";
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminPassword) {
+    return { error: "ADMIN_PASSWORD não configurado no servidor." };
+  }
 
   if (password !== adminPassword) {
     return { error: "Senha incorreta." };
   }
 
-  cookies().set("mb_admin_session", adminPassword, {
+  cookies().set("mb_admin_session", deriveSessionToken(adminPassword), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
