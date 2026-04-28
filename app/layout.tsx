@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   },
   description:
     "Catálogo online da MB Multimarcas Infantil com roupas infantis, conjuntos, vestidos e peças para bebê. Atendimento direto pelo WhatsApp.",
+  icons: {
+    icon: "/logo.jpg",
+    shortcut: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
   openGraph: {
     title: "MB Multimarcas Infantil",
     description:
@@ -22,10 +27,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=1200&q=80",
+        url: "/hero.png",
         width: 1200,
-        height: 800,
-        alt: "Moda infantil MB Multimarcas Infantil",
+        height: 630,
+        alt: "MB Multimarcas Infantil — Moda Infantil",
       },
     ],
   },
