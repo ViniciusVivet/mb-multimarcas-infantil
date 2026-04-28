@@ -26,14 +26,7 @@ export function Catalog({ products }: { products: Product[] }) {
 
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [search, setSearch] = useState("");
-  const [scrolled, setScrolled] = useState(false);
   const pillsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -102,7 +95,7 @@ export function Catalog({ products }: { products: Product[] }) {
       </div>
 
       {/* Pills de categoria — sticky, scroll horizontal */}
-      <div className={`sticky z-30 bg-[#e8f6f9]/95 backdrop-blur-md shadow-sm transition-[top] duration-300 ${scrolled ? "top-[52px] md:top-[60px]" : "top-[64px] md:top-[76px]"}`}>
+      <div className="sticky top-16 z-30 bg-[#e8f6f9]/95 backdrop-blur-md shadow-sm md:top-[76px]">
         <div
           ref={pillsRef}
           className="scrollbar-hide flex gap-2 overflow-x-auto px-4 py-3 sm:px-10 lg:px-16"

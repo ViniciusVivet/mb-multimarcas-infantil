@@ -15,8 +15,8 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 backdrop-blur-xl transition-[min-height,box-shadow] duration-300 md:px-10 lg:px-16 ${
-      scrolled ? "min-h-[52px] shadow-soft md:min-h-[60px]" : "min-h-[64px] md:min-h-[76px]"
+    <header className={`sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 backdrop-blur-xl transition-shadow duration-300 md:h-[76px] md:px-10 lg:px-16 ${
+      scrolled ? "shadow-soft" : ""
     }`}>
 
       <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={store.name}>
