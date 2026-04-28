@@ -7,7 +7,13 @@ import { uploadImageAction } from "../actions";
 
 type Photo = { url: string; uploading?: boolean; error?: string };
 
-export function PhotoUploader({ defaultPhotos = [] }: { defaultPhotos?: string[] }) {
+export function PhotoUploader({
+  defaultPhotos = [],
+  onFirstPhotoChange,
+}: {
+  defaultPhotos?: string[];
+  onFirstPhotoChange?: (url: string) => void;
+}) {
   const [photos, setPhotos] = useState<Photo[]>(
     defaultPhotos.map((url) => ({ url }))
   );
@@ -43,6 +49,8 @@ export function PhotoUploader({ defaultPhotos = [] }: { defaultPhotos?: string[]
               ? { url: result.url }
               : { url: "", error: result.error ?? "Erro ao enviar" };
           }
+          const firstUrl = next.find((p) => p.url && !p.uploading)?.url ?? "";
+          onFirstPhotoChange?.(firstUrl);
           return next;
         });
       } catch {
@@ -57,7 +65,12 @@ export function PhotoUploader({ defaultPhotos = [] }: { defaultPhotos?: string[]
   }
 
   function removePhoto(index: number) {
-    setPhotos((prev) => prev.filter((_, i) => i !== index));
+    setPhotos((prev) => {
+      const next = prev.filter((_, i) => i !== index);
+      const firstUrl = next.find((p) => p.url && !p.uploading)?.url ?? "";
+      onFirstPhotoChange?.(firstUrl);
+      return next;
+    });
   }
 
   const validUrls = photos.filter((p) => p.url && !p.uploading).map((p) => p.url);

@@ -14,9 +14,23 @@ export function slugify(name: string) {
 export async function getProducts(): Promise<Product[]> {
   const db = getSupabaseClient();
   if (!db) return staticProducts;
-  const { data, error } = await db.from("produtos").select("*").order("created_at", { ascending: false });
+  const { data, error } = await db
+    .from("produtos")
+    .select("*")
+    .order("position", { ascending: true })
+    .order("created_at", { ascending: false });
   if (error || !data?.length) return staticProducts;
   return data as Product[];
+}
+
+export async function updatePositions(slugs: string[]): Promise<{ ok: boolean; error?: string }> {
+  const db = getSupabaseClient();
+  if (!db) return { ok: false, error: "Banco de dados não configurado." };
+  for (let i = 0; i < slugs.length; i++) {
+    const { error } = await db.from("produtos").update({ position: i }).eq("slug", slugs[i]);
+    if (error) return { ok: false, error: error.message };
+  }
+  return { ok: true };
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {

@@ -4,7 +4,7 @@ import { createHmac } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createProduct, updateProduct, deleteProduct } from "@/lib/products-db";
+import { createProduct, updateProduct, deleteProduct, updatePositions } from "@/lib/products-db";
 import { uploadProductImage } from "@/lib/storage";
 
 // ── Auth ────────────────────────────────────────────────────────────────────
@@ -109,6 +109,12 @@ export async function atualizarProdutoAction(
 
 export async function deletarProdutoAction(slug: string) {
   await deleteProduct(slug);
+  revalidatePath("/");
+  revalidatePath("/admin/produtos");
+}
+
+export async function updatePositionsAction(slugs: string[]) {
+  await updatePositions(slugs);
   revalidatePath("/");
   revalidatePath("/admin/produtos");
 }

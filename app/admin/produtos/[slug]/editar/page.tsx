@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/products-db";
-import { ProductForm } from "../../../_components/ProductForm";
+import { ProductFormWithPreview } from "../../../_components/ProductFormWithPreview";
 import { atualizarProdutoAction } from "../../../actions";
 
 export default async function EditarProdutoPage({ params }: { params: { slug: string } }) {
@@ -12,7 +12,7 @@ export default async function EditarProdutoPage({ params }: { params: { slug: st
 
   return (
     <div className="min-h-screen px-4 py-8 md:px-8">
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex items-center gap-3">
           <Link href="/admin/produtos" className="rounded-xl p-2 text-muted hover:bg-white hover:text-ink transition-colors">
             ← Voltar
@@ -24,7 +24,7 @@ export default async function EditarProdutoPage({ params }: { params: { slug: st
           <p className="mb-5 text-xs font-medium text-muted">
             Slug: <span className="font-mono text-ink">{produto.slug}</span>
           </p>
-          <ProductForm
+          <ProductFormWithPreview
             action={action}
             defaultValues={produto}
             submitLabel="Salvar alterações"
