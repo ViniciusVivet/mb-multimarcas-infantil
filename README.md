@@ -25,27 +25,21 @@ Troque o WhatsApp usando `55 + DDD + numero`, apenas numeros:
 whatsapp: "5500000000000",
 ```
 
-## Editar produtos
+## Painel admin (gerenciar produtos)
 
-Arquivo:
+Acesse `/admin` no site e faça login com a senha configurada em `ADMIN_PASSWORD`.
 
-```txt
-data/products.ts
-```
+Para ativar o banco de dados e o painel, siga o `ADMIN_SETUP.md`.
 
-Modelo:
+## Variáveis de ambiente
 
-```ts
-{
-  slug: "nome-unico-do-produto",
-  name: "Nome do produto",
-  category: "Vestidos",
-  price: "R$ 89,90",
-  sizes: ["2", "4", "6"],
-  description: "Descricao curta do produto.",
-  images: ["url-da-foto-1", "url-da-foto-2"],
-}
-```
+| Variável | Descrição |
+|----------|-----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
+| `SUPABASE_SERVICE_KEY` | Chave service_role do Supabase |
+| `ADMIN_PASSWORD` | Senha de acesso ao painel admin |
+
+Sem essas variáveis o site funciona normalmente com os produtos estáticos, mas o painel admin não salva.
 
 ## Deploy
 
