@@ -58,7 +58,7 @@ export async function updateProduct(
 ): Promise<{ ok: boolean; error?: string }> {
   const db = getSupabaseClient();
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
-  const { error } = await db.from("produtos").update(input).eq("slug", slug);
+  const { error } = await db.from("produtos").upsert({ slug, ...input }, { onConflict: "slug" });
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
