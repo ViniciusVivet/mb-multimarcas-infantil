@@ -6,6 +6,7 @@ export type Product = {
   sizes: string[];
   description: string;
   images: string[];
+  videos?: string[];
 };
 
 // 10 produtos com imagens únicas (sem repetição no grid)

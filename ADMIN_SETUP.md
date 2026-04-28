@@ -16,11 +16,12 @@
 
 ---
 
-## 2. Criar a tabela de produtos
+## 2. Criar a tabela e o storage de produtos
 
-No Supabase, vá em **SQL Editor** e execute:
+No Supabase, vá em **SQL Editor** e execute tudo de uma vez:
 
 ```sql
+-- Tabela de produtos
 create table produtos (
   slug        text primary key,
   name        text not null,
@@ -29,13 +30,27 @@ create table produtos (
   description text not null,
   sizes       text[] not null default '{}',
   images      text[] not null default '{}',
+  videos      text[] not null default '{}',
   created_at  timestamptz not null default now()
 );
 
--- Permite leitura pública (sem autenticação) para o site
 alter table produtos enable row level security;
 create policy "Leitura pública" on produtos for select using (true);
 create policy "Escrita service key" on produtos for all using (true);
+
+-- Bucket de fotos (upload direto do painel admin)
+insert into storage.buckets (id, name, public)
+  values ('produtos', 'produtos', true)
+  on conflict (id) do nothing;
+
+create policy "Fotos públicas" on storage.objects
+  for select using (bucket_id = 'produtos');
+
+create policy "Upload de fotos" on storage.objects
+  for insert with check (bucket_id = 'produtos');
+
+create policy "Delete de fotos" on storage.objects
+  for delete using (bucket_id = 'produtos');
 ```
 
 ---

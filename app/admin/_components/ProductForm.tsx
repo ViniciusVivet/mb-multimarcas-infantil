@@ -2,6 +2,7 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import type { Product } from "@/data/products";
+import { PhotoUploader } from "./PhotoUploader";
 
 type Props = {
   action: (prev: unknown, formData: FormData) => Promise<{ error?: string }>;
@@ -22,7 +23,10 @@ function SubmitButton({ label }: { label: string }) {
   );
 }
 
-const categories = ["Vestidos", "Conjuntos", "Camisetas", "Calças", "Macacões", "Acessórios", "Casacos", "Shorts"];
+const categories = [
+  "Vestidos", "Conjuntos", "Camisetas", "Calças",
+  "Macacões", "Acessórios", "Casacos", "Shorts",
+];
 
 export function ProductForm({ action, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
@@ -90,18 +94,29 @@ export function ProductForm({ action, defaultValues, submitLabel }: Props) {
         />
       </div>
 
-      {/* Imagens */}
+      {/* Fotos */}
       <div>
-        <label className="mb-1.5 block text-sm font-semibold text-ink">Links das imagens *</label>
-        <textarea
-          name="images"
-          required
-          rows={4}
-          defaultValue={defaultValues?.images?.join("\n")}
-          placeholder={"https://exemplo.com/foto1.jpg\nhttps://exemplo.com/foto2.jpg"}
-          className="input w-full resize-none font-mono text-xs"
-        />
-        <p className="mt-1 text-xs text-muted">Cole um link por linha. Use links de imagens do Google Drive, Imgur, etc.</p>
+        <label className="mb-1.5 block text-sm font-semibold text-ink">Fotos do produto</label>
+        <PhotoUploader defaultPhotos={defaultValues?.images} />
+      </div>
+
+      {/* Vídeos */}
+      <div>
+        <label className="mb-1.5 block text-sm font-semibold text-ink">Vídeos (opcional)</label>
+        <div className="flex flex-col gap-2">
+          {[0, 1].map((i) => (
+            <input
+              key={i}
+              name={`video_${i}`}
+              defaultValue={defaultValues?.videos?.[i] ?? ""}
+              placeholder="Cole o link do YouTube (ex: https://youtube.com/watch?v=...)"
+              className="input w-full"
+            />
+          ))}
+        </div>
+        <p className="mt-1 text-xs text-muted">
+          Suba o vídeo no YouTube (pode ser não listado) e cole o link aqui
+        </p>
       </div>
 
       {state?.error && (

@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createProduct, updateProduct, deleteProduct } from "@/lib/products-db";
+import { uploadProductImage } from "@/lib/storage";
 
 // ── Auth ────────────────────────────────────────────────────────────────────
 
@@ -28,7 +29,7 @@ export async function loginAction(formData: FormData) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 dias
+    maxAge: 60 * 60 * 24 * 7,
     path: "/",
   });
 
@@ -40,6 +41,16 @@ export async function logoutAction() {
   redirect("/admin");
 }
 
+// ── Upload de imagem ──────────────────────────────────────────────────────────
+
+export async function uploadImageAction(
+  formData: FormData
+): Promise<{ url?: string; error?: string }> {
+  const file = formData.get("file") as File;
+  if (!file || file.size === 0) return { error: "Arquivo inválido." };
+  return uploadProductImage(file);
+}
+
 // ── Produtos ─────────────────────────────────────────────────────────────────
 
 function parseFormProduct(formData: FormData) {
@@ -48,10 +59,17 @@ function parseFormProduct(formData: FormData) {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  const images = (formData.get("images") as string)
-    .split("\n")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  let images: string[] = [];
+  try {
+    images = JSON.parse(formData.get("images") as string) as string[];
+  } catch {
+    images = [];
+  }
+
+  const videos = [
+    formData.get("video_0") as string,
+    formData.get("video_1") as string,
+  ].filter(Boolean);
 
   return {
     name: formData.get("name") as string,
@@ -60,6 +78,7 @@ function parseFormProduct(formData: FormData) {
     description: formData.get("description") as string,
     sizes,
     images,
+    videos,
   };
 }
 
