@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/products";
@@ -6,11 +9,14 @@ import { getWhatsappLink } from "@/data/store";
 type Props = { product: Product };
 
 export function ProductCard({ product }: Props) {
+  const [active, setActive] = useState(0);
+  const images = product.images;
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-line transition-all duration-300 active:scale-[0.98] hover:-translate-y-0.5 hover:shadow-soft">
       <Link href={`/produto/${product.slug}`} className="relative block aspect-[3/4] overflow-hidden bg-paper">
         <Image
-          src={product.images[0]}
+          src={images[active] ?? images[0]}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -22,11 +28,17 @@ export function ProductCard({ product }: Props) {
             {product.category}
           </span>
         </div>
-        {/* Multiple images indicator */}
-        {product.images.length > 1 && (
+        {/* Dots — uma por foto, hover muda a imagem */}
+        {images.length > 0 && (
           <div className="absolute bottom-2 right-2 flex gap-1">
-            {product.images.map((_, i) => (
-              <span key={i} className={`h-1.5 w-1.5 rounded-full ${i === 0 ? "bg-white" : "bg-white/50"}`} />
+            {images.map((_, i) => (
+              <span
+                key={i}
+                onMouseEnter={() => setActive(i)}
+                className={`block h-1.5 w-1.5 rounded-full transition-all duration-200 ${
+                  i === active ? "bg-white scale-125" : "bg-white/50 hover:bg-white/80"
+                }`}
+              />
             ))}
           </div>
         )}
