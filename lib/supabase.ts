@@ -4,5 +4,9 @@ export function getSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = (process.env.SUPABASE_SERVICE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)?.trim();
   if (!url || !key) return null;
-  return createClient(url, key);
+  return createClient(url, key, {
+    global: {
+      fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }),
+    },
+  });
 }
