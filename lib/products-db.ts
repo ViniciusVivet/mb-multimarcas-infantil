@@ -14,11 +14,22 @@ export function slugify(name: string) {
 export async function getProducts(): Promise<Product[]> {
   const db = getSupabaseClient();
   if (!db) return staticProducts;
-  const { data, error } = await db
+
+  // Tenta ordenar por position (coluna opcional). Se a coluna não existir,
+  // busca só por created_at para não cair no fallback estático.
+  let { data, error } = await db
     .from("produtos")
     .select("*")
     .order("position", { ascending: true })
     .order("created_at", { ascending: false });
+
+  if (error) {
+    ({ data, error } = await db
+      .from("produtos")
+      .select("*")
+      .order("created_at", { ascending: false }));
+  }
+
   if (error || !data?.length) return staticProducts;
   return data as Product[];
 }

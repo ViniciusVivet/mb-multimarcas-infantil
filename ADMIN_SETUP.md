@@ -31,8 +31,12 @@ create table produtos (
   sizes       text[] not null default '{}',
   images      text[] not null default '{}',
   videos      text[] not null default '{}',
+  position    integer,
   created_at  timestamptz not null default now()
 );
+
+-- Se a tabela já existe, adicione a coluna position:
+-- alter table produtos add column if not exists position integer;
 
 alter table produtos enable row level security;
 create policy "Leitura pública" on produtos for select using (true);
