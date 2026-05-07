@@ -36,9 +36,9 @@ export async function updatePositions(slugs: string[]): Promise<{ ok: boolean; e
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const db = getSupabaseClient();
   if (!db) return staticProducts.find((p) => p.slug === slug) ?? null;
-  const { data, error } = await db.from("produtos").select("*").eq("slug", slug).single();
-  if (error || !data) return staticProducts.find((p) => p.slug === slug) ?? null;
-  return data as Product;
+  const { data, error } = await db.from("produtos").select("*").eq("slug", slug).limit(1);
+  if (error || !data?.length) return staticProducts.find((p) => p.slug === slug) ?? null;
+  return data[0] as Product;
 }
 
 export async function createProduct(
