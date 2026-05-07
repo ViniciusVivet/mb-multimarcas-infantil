@@ -30,7 +30,7 @@ export function About() {
           💬 Falar com a loja
         </a>
       </div>
-      <div className="relative min-h-[400px]">
+      <div className="relative aspect-square">
         <Image
           src="/about.jpeg"
           alt="Arara com roupas infantis coloridas"
