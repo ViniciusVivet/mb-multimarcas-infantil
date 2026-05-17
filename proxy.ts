@@ -16,8 +16,13 @@ async function deriveSessionToken(password: string): Promise<string> {
     .join("");
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  const response = NextResponse.next();
+  if (pathname.startsWith("/admin")) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
 
   if (pathname.startsWith("/admin") && pathname !== "/admin") {
     const adminPassword = process.env.ADMIN_PASSWORD;
@@ -33,7 +38,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

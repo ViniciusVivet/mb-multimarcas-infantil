@@ -85,7 +85,7 @@ No painel da Vercel, vá em **Settings → Environment Variables** e adicione:
 |------|-------|
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto (ex: `https://xyzabc.supabase.co`) |
 | `SUPABASE_SERVICE_KEY` | Service role key (começa com `eyJ...`) |
-| `ADMIN_PASSWORD` | Senha de acesso ao painel (ex: `minhasenha123`) |
+| `ADMIN_PASSWORD` | Senha forte de acesso ao painel, com pelo menos 12 caracteres |
 
 Depois clique em **Redeploy** para aplicar.
 
@@ -110,7 +110,7 @@ Crie um arquivo `.env.local` na raiz do projeto:
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://xyzabc.supabase.co
 SUPABASE_SERVICE_KEY=eyJ...
-ADMIN_PASSWORD=admin123
+ADMIN_PASSWORD=troque-por-uma-senha-forte-com-12-caracteres-ou-mais
 ```
 
 > **Nunca** suba o `.env.local` para o Git (já está no `.gitignore`).
@@ -122,3 +122,4 @@ ADMIN_PASSWORD=admin123
 - Se o Supabase não estiver configurado, o site continua funcionando com os produtos estáticos de `data/products.ts`
 - O painel requer JavaScript habilitado no navegador
 - A senha do admin fica apenas no servidor (nunca exposta ao cliente)
+- Não use senhas simples como nome da loja, telefone, `admin123` ou datas
