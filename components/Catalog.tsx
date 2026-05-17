@@ -18,11 +18,7 @@ const categoryEmojis: Record<string, string> = {
   "Acessórios": "✨",
 };
 
-export function Catalog({ products }: { products: Product[] }) {
-  const categories = useMemo(
-    () => Array.from(new Set(products.map((p) => p.category))),
-    [products]
-  );
+export function Catalog({ products, categories }: { products: Product[]; categories: string[] }) {
 
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [search, setSearch] = useState("");

@@ -7,18 +7,20 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { StoreLocation } from "@/components/StoreLocation";
 import { getProducts } from "@/lib/products-db";
+import { getSortedCategories } from "@/lib/categories-db";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
   const products = await getProducts();
+  const categories = await getSortedCategories(products);
 
   return (
     <>
       <Header />
       <main className="pb-24 md:pb-0">
         <Hero />
-        <Catalog products={products} />
+        <Catalog products={products} categories={categories} />
         <About />
         <StoreLocation />
         <Contact />

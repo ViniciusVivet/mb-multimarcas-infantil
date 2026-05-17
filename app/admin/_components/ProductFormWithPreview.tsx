@@ -12,15 +12,16 @@ type Props = {
   submitLabel: string;
 };
 
-function SubmitButton({ label }: { label: string }) {
+function SubmitButton({ label, uploading }: { label: string; uploading: boolean }) {
   const { pending } = useFormStatus();
+  const disabled = pending || uploading;
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={disabled}
       className="button button-primary w-full py-3 text-sm font-bold disabled:opacity-60"
     >
-      {pending ? "Salvando..." : label}
+      {pending ? "Salvando..." : uploading ? "Aguardando upload..." : label}
     </button>
   );
 }
@@ -32,6 +33,7 @@ const categories = [
 
 export function ProductFormWithPreview({ action, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
+  const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState({
     name: defaultValues?.name ?? "",
     price: defaultValues?.price ?? "",
@@ -119,6 +121,7 @@ export function ProductFormWithPreview({ action, defaultValues, submitLabel }: P
             <PhotoUploader
               defaultPhotos={defaultValues?.images}
               onFirstPhotoChange={(url) => setPreview((p) => ({ ...p, imageUrl: url }))}
+              onUploadingChange={setUploading}
             />
           </div>
 
@@ -147,7 +150,7 @@ export function ProductFormWithPreview({ action, defaultValues, submitLabel }: P
             </p>
           )}
 
-          <SubmitButton label={submitLabel} />
+          <SubmitButton label={submitLabel} uploading={uploading} />
         </form>
       </div>
 

@@ -180,17 +180,36 @@ export function ProductGallery({ product }: { product: Product }) {
     [items.length]
   );
 
-  // Keyboard (modal only)
+  // Keyboard navigation
   useEffect(() => {
-    if (!modalOpen) return;
+    if (items.length <= 1) return;
+
     function onKey(e: KeyboardEvent) {
-      if (e.key === "ArrowRight") goTo(current + 1);
-      if (e.key === "ArrowLeft") goTo(current - 1);
+      const target = e.target as HTMLElement | null;
+      const isTyping =
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.tagName === "SELECT" ||
+        target?.isContentEditable;
+
+      if (isTyping) return;
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goTo(current + 1);
+      }
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goTo(current - 1);
+      }
+
       if (e.key === "Escape") setModalOpen(false);
     }
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [modalOpen, current, goTo]);
+  }, [current, goTo, items.length]);
 
   // Lock body scroll when modal open
   useEffect(() => {

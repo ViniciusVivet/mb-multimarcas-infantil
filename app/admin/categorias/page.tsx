@@ -1,13 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/products-db";
+import { getSortedCategories } from "@/lib/categories-db";
 import { logoutAction } from "../actions";
-import { ProductList } from "../_components/ProductList";
+import { CategoryList } from "../_components/CategoryList";
 
 export const revalidate = 0;
 
-export default async function ProdutosAdminPage() {
+export default async function CategoriasAdminPage() {
   const produtos = await getProducts();
+  const categories = await getSortedCategories(produtos);
 
   return (
     <div className="min-h-screen px-4 py-8 md:px-8">
@@ -16,18 +18,15 @@ export default async function ProdutosAdminPage() {
         <div className="flex items-center gap-3">
           <Image src="/logo.jpg" alt="Logo" width={40} height={40} className="rounded-xl" />
           <div>
-            <h1 className="text-lg font-black text-ink">Produtos</h1>
+            <h1 className="text-lg font-black text-ink">Categorias</h1>
             <p className="text-xs text-muted">
-              {produtos.length} produto{produtos.length !== 1 ? "s" : ""} cadastrado{produtos.length !== 1 ? "s" : ""}
+              {categories.length} categoria{categories.length !== 1 ? "s" : ""} — arraste para reordenar
             </p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/categorias" className="button button-secondary px-4 py-2 text-sm">
-            Categorias
-          </Link>
-          <Link href="/admin/produtos/novo" className="button button-primary px-4 py-2 text-sm">
-            + Novo produto
+          <Link href="/admin/produtos" className="button button-secondary px-4 py-2 text-sm">
+            Produtos
           </Link>
           <form action={logoutAction}>
             <button type="submit" className="button button-secondary px-4 py-2 text-sm">
@@ -37,7 +36,15 @@ export default async function ProdutosAdminPage() {
         </div>
       </div>
 
-      <ProductList produtos={produtos} />
+      {categories.length === 0 ? (
+        <div className="rounded-3xl bg-white p-12 text-center shadow-soft">
+          <p className="text-4xl">🏷️</p>
+          <p className="mt-3 font-bold text-ink">Nenhuma categoria ainda</p>
+          <p className="mt-1 text-sm text-muted">Cadastre produtos para as categorias aparecerem aqui.</p>
+        </div>
+      ) : (
+        <CategoryList categories={categories} />
+      )}
     </div>
   );
 }

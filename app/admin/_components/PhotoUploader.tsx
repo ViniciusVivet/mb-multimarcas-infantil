@@ -10,9 +10,11 @@ type Photo = { url: string; uploading?: boolean; error?: string };
 export function PhotoUploader({
   defaultPhotos = [],
   onFirstPhotoChange,
+  onUploadingChange,
 }: {
   defaultPhotos?: string[];
   onFirstPhotoChange?: (url: string) => void;
+  onUploadingChange?: (uploading: boolean) => void;
 }) {
   const [photos, setPhotos] = useState<Photo[]>(
     defaultPhotos.map((url) => ({ url }))
@@ -24,10 +26,14 @@ export function PhotoUploader({
     const toProcess = Array.from(files).slice(0, slots);
     if (!toProcess.length) return;
 
-    setPhotos((prev) => [
-      ...prev.filter((p) => !p.error),
-      ...toProcess.map(() => ({ url: "", uploading: true as const })),
-    ]);
+    setPhotos((prev) => {
+      const next = [
+        ...prev.filter((p) => !p.error),
+        ...toProcess.map(() => ({ url: "", uploading: true as const })),
+      ];
+      onUploadingChange?.(true);
+      return next;
+    });
 
     for (const file of toProcess) {
       try {
@@ -49,6 +55,8 @@ export function PhotoUploader({
               ? { url: result.url }
               : { url: "", error: result.error ?? "Erro ao enviar" };
           }
+          const stillUploading = next.some((p) => p.uploading);
+          onUploadingChange?.(stillUploading);
           const firstUrl = next.find((p) => p.url && !p.uploading)?.url ?? "";
           onFirstPhotoChange?.(firstUrl);
           return next;
@@ -58,6 +66,8 @@ export function PhotoUploader({
           const next = [...prev];
           const idx = next.findIndex((p) => p.uploading);
           if (idx !== -1) next[idx] = { url: "", error: "Erro ao enviar" };
+          const stillUploading = next.some((p) => p.uploading);
+          onUploadingChange?.(stillUploading);
           return next;
         });
       }
@@ -113,7 +123,7 @@ export function PhotoUploader({
                 <button
                   type="button"
                   onClick={() => removePhoto(i)}
-                  className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-xs text-white hover:bg-black transition-colors"
+                  className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-sm font-bold text-white hover:bg-red-500 transition-colors active:scale-95"
                   aria-label="Remover foto"
                 >
                   ✕

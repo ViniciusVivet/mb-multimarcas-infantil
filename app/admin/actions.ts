@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createProduct, updateProduct, deleteProduct, updatePositions } from "@/lib/products-db";
+import { updateCategoryPositions } from "@/lib/categories-db";
 import { uploadProductImage } from "@/lib/storage";
 
 // ── Auth ────────────────────────────────────────────────────────────────────
@@ -119,4 +120,14 @@ export async function updatePositionsAction(slugs: string[]) {
   await updatePositions(slugs);
   revalidatePath("/");
   revalidatePath("/admin/produtos");
+}
+
+export async function updateCategoryPositionsAction(
+  names: string[]
+): Promise<{ error?: string }> {
+  const result = await updateCategoryPositions(names);
+  if (!result.ok) return { error: result.error };
+  revalidatePath("/");
+  revalidatePath("/admin/categorias");
+  return {};
 }
