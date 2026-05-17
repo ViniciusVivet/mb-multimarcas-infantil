@@ -14,6 +14,17 @@ function deriveSessionToken(password: string) {
   return createHmac("sha256", password).update("mb-admin-session-v1").digest("hex");
 }
 
+function getAdminAuthError() {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) return "ADMIN_PASSWORD não configurado no servidor.";
+
+  const session = cookies().get("mb_admin_session")?.value;
+  const expected = deriveSessionToken(adminPassword);
+  if (session !== expected) return "Sessão expirada. Faça login novamente.";
+
+  return null;
+}
+
 export async function loginAction(formData: FormData) {
   const password = formData.get("password") as string;
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -47,6 +58,9 @@ export async function logoutAction() {
 export async function uploadImageAction(
   formData: FormData
 ): Promise<{ url?: string; error?: string }> {
+  const authError = getAdminAuthError();
+  if (authError) return { error: authError };
+
   const file = formData.get("file") as File;
   if (!file || file.size === 0) return { error: "Arquivo inválido." };
   return uploadProductImage(file);
@@ -87,6 +101,9 @@ export async function criarProdutoAction(
   _: unknown,
   formData: FormData
 ): Promise<{ error?: string }> {
+  const authError = getAdminAuthError();
+  if (authError) return { error: authError };
+
   const data = parseFormProduct(formData);
   const result = await createProduct(data);
   if (!result.ok) return { error: result.error };
@@ -100,6 +117,9 @@ export async function atualizarProdutoAction(
   _: unknown,
   formData: FormData
 ): Promise<{ error?: string }> {
+  const authError = getAdminAuthError();
+  if (authError) return { error: authError };
+
   const data = parseFormProduct(formData);
   const result = await updateProduct(slug, data);
   if (!result.ok) return { error: result.error };
@@ -109,6 +129,9 @@ export async function atualizarProdutoAction(
 }
 
 export async function deletarProdutoAction(slug: string): Promise<{ error?: string }> {
+  const authError = getAdminAuthError();
+  if (authError) return { error: authError };
+
   const result = await deleteProduct(slug);
   if (!result.ok) return { error: result.error };
   revalidatePath("/");
@@ -116,15 +139,23 @@ export async function deletarProdutoAction(slug: string): Promise<{ error?: stri
   return {};
 }
 
-export async function updatePositionsAction(slugs: string[]) {
-  await updatePositions(slugs);
+export async function updatePositionsAction(slugs: string[]): Promise<{ error?: string }> {
+  const authError = getAdminAuthError();
+  if (authError) return { error: authError };
+
+  const result = await updatePositions(slugs);
+  if (!result.ok) return { error: result.error };
   revalidatePath("/");
   revalidatePath("/admin/produtos");
+  return {};
 }
 
 export async function updateCategoryPositionsAction(
   names: string[]
 ): Promise<{ error?: string }> {
+  const authError = getAdminAuthError();
+  if (authError) return { error: authError };
+
   const result = await updateCategoryPositions(names);
   if (!result.ok) return { error: result.error };
   revalidatePath("/");

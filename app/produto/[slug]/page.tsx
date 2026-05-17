@@ -7,7 +7,6 @@ import { Header } from "@/components/Header";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductActions } from "@/components/ProductActions";
-import { products as staticProducts } from "@/data/products";
 import { getProductBySlug, getProducts } from "@/lib/products-db";
 
 type Props = { params: { slug: string } };
@@ -15,19 +14,21 @@ type Props = { params: { slug: string } };
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  return staticProducts.map((p) => ({ slug: p.slug }));
+  const products = await getProducts();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(params.slug);
   if (!product) return {};
+  const image = product.images[0];
   return {
     title: product.name,
     description: product.description,
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [{ url: product.images[0], width: 900, height: 1125, alt: product.name }],
+      images: image ? [{ url: image, width: 900, height: 1125, alt: product.name }] : [],
     },
   };
 }

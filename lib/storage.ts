@@ -1,12 +1,27 @@
 import { getSupabaseClient } from "./supabase";
 
+const allowedImageTypes: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/avif": "avif",
+};
+
 export async function uploadProductImage(
   file: File
 ): Promise<{ url?: string; error?: string }> {
   const db = getSupabaseClient();
   if (!db) return { error: "Storage não configurado." };
 
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+  if (file.size > 8 * 1024 * 1024) {
+    return { error: "Imagem muito grande. Envie um arquivo de até 8 MB." };
+  }
+
+  const ext = allowedImageTypes[file.type];
+  if (!ext) {
+    return { error: "Formato inválido. Use JPG, PNG, WebP ou AVIF." };
+  }
+
   const path = `produtos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
   const { error } = await db.storage

@@ -30,7 +30,8 @@ export async function getProducts(): Promise<Product[]> {
       .order("created_at", { ascending: false }));
   }
 
-  if (error || !data?.length) return staticProducts;
+  if (error) return staticProducts;
+  if (!data?.length) return [];
   return data as Product[];
 }
 
@@ -48,7 +49,8 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   const db = getSupabaseClient();
   if (!db) return staticProducts.find((p) => p.slug === slug) ?? null;
   const { data, error } = await db.from("produtos").select("*").eq("slug", slug).limit(1);
-  if (error || !data?.length) return staticProducts.find((p) => p.slug === slug) ?? null;
+  if (error) return staticProducts.find((p) => p.slug === slug) ?? null;
+  if (!data?.length) return null;
   return data[0] as Product;
 }
 

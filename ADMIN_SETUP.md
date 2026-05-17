@@ -39,23 +39,32 @@ create table produtos (
 -- alter table produtos add column if not exists position integer;
 
 alter table produtos enable row level security;
-create policy "Leitura pública" on produtos for select using (true);
-create policy "Escrita service key" on produtos for all using (true);
+create policy "Leitura pública de produtos" on produtos
+  for select
+  using (true);
+
+-- Ordem das categorias no catálogo
+create table categorias (
+  name       text primary key,
+  position   integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table categorias enable row level security;
+create policy "Leitura pública de categorias" on categorias
+  for select
+  using (true);
 
 -- Bucket de fotos (upload direto do painel admin)
 insert into storage.buckets (id, name, public)
   values ('produtos', 'produtos', true)
   on conflict (id) do nothing;
 
-create policy "Fotos públicas" on storage.objects
+create policy "Leitura pública das fotos" on storage.objects
   for select using (bucket_id = 'produtos');
-
-create policy "Upload de fotos" on storage.objects
-  for insert with check (bucket_id = 'produtos');
-
-create policy "Delete de fotos" on storage.objects
-  for delete using (bucket_id = 'produtos');
 ```
+
+As escritas do painel usam `SUPABASE_SERVICE_KEY` pelo servidor. Não crie policies públicas de `insert`, `update` ou `delete` para `produtos`, `categorias` ou `storage.objects`.
 
 ---
 

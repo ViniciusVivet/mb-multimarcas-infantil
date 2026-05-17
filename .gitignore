@@ -11,3 +11,4 @@ yarn-error.log*
 pnpm-debug.log*
 CLAUDE.md
 .claude/settings.local.json
+tsconfig.tsbuildinfo

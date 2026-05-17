@@ -91,6 +91,7 @@ export function ProductList({ produtos: initial }: { produtos: Product[] }) {
   const [produtos, setProdutos] = useState(initial);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -109,10 +110,15 @@ export function ProductList({ produtos: initial }: { produtos: Product[] }) {
 
     setSaving(true);
     setSaved(false);
-    await updatePositionsAction(reordered.map((p) => p.slug));
+    setError(null);
+    const result = await updatePositionsAction(reordered.map((p) => p.slug));
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    }
   }
 
   if (produtos.length === 0) {
@@ -131,7 +137,8 @@ export function ProductList({ produtos: initial }: { produtos: Product[] }) {
       <div className="mb-4 flex items-center gap-2 text-xs font-semibold">
         {saving && <span className="text-muted">Salvando ordem...</span>}
         {saved && <span className="text-mint">Ordem salva!</span>}
-        {!saving && !saved && (
+        {error && <span className="text-red-500">{error}</span>}
+        {!saving && !saved && !error && (
           <span className="text-muted/60">Arraste os cards para reordenar os produtos no site</span>
         )}
       </div>

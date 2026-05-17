@@ -11,17 +11,24 @@ type Props = { product: Product };
 export function ProductCard({ product }: Props) {
   const [active, setActive] = useState(0);
   const images = product.images;
+  const currentImage = images[active] ?? images[0];
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-line transition-all duration-300 active:scale-[0.98] hover:-translate-y-0.5 hover:shadow-soft">
       <Link href={`/produto/${product.slug}`} className="relative block aspect-[3/4] overflow-hidden bg-paper">
-        <Image
-          src={images[active] ?? images[0]}
-          alt={product.name}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="object-cover transition duration-500 group-hover:scale-105"
-        />
+        {currentImage ? (
+          <Image
+            src={currentImage}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center text-5xl text-muted/30">
+            👕
+          </div>
+        )}
         {/* Category badge */}
         <div className="absolute top-2 left-2">
           <span className="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-extrabold text-coral shadow-sm backdrop-blur-sm">
