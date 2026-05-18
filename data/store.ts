@@ -7,11 +7,11 @@ export const store = {
 export function getWhatsappLink(productName?: string, size?: string) {
   let message: string;
   if (productName && size) {
-    message = `Oi! Vi o produto "${productName}" (tamanho ${size}) no site da MB Multimarcas e gostaria de saber se ainda está disponível. 😊`;
+    message = `Oi! Vi esse produto no site da MB Multimarcas Infantil e gostaria de saber se ainda está disponível.\n\nProduto: ${productName}\nTamanho escolhido: ${size}`;
   } else if (productName) {
-    message = `Oi! Vi o produto "${productName}" no site da MB Multimarcas e gostaria de saber se ainda está disponível. 😊`;
+    message = `Oi! Vi esse produto no site da MB Multimarcas Infantil e gostaria de saber se ainda está disponível.\n\nProduto: ${productName}`;
   } else {
-    message = "Oi! Vim pelo site da MB Multimarcas Infantil e gostaria de conhecer os produtos. 😊";
+    message = "Oi! Vim pelo site da MB Multimarcas Infantil e gostaria de conhecer os produtos.";
   }
   return `https://wa.me/${store.whatsapp}?text=${encodeURIComponent(message)}`;
 }
