@@ -10,7 +10,7 @@ const allowedImageTypes: Record<string, string> = {
 export async function uploadProductImage(
   file: File
 ): Promise<{ url?: string; error?: string }> {
-  const db = getSupabaseClient();
+  const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { error: "Storage não configurado." };
 
   if (file.size > 8 * 1024 * 1024) {

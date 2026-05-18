@@ -36,7 +36,7 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function updatePositions(slugs: string[]): Promise<{ ok: boolean; error?: string }> {
-  const db = getSupabaseClient();
+  const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado." };
   for (let i = 0; i < slugs.length; i++) {
     const { error } = await db.from("produtos").update({ position: i }).eq("slug", slugs[i]);
@@ -60,7 +60,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function createProduct(
   input: Omit<Product, "slug">
 ): Promise<{ ok: boolean; slug?: string; error?: string }> {
-  const db = getSupabaseClient();
+  const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
   const slug = slugify(input.name);
   const { error } = await db.from("produtos").insert({ ...input, slug });
@@ -72,7 +72,7 @@ export async function updateProduct(
   slug: string,
   input: Partial<Omit<Product, "slug">>
 ): Promise<{ ok: boolean; error?: string }> {
-  const db = getSupabaseClient();
+  const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
   const { error } = await db.from("produtos").upsert({ slug, ...input }, { onConflict: "slug" });
   if (error) return { ok: false, error: error.message };
@@ -80,7 +80,7 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(slug: string): Promise<{ ok: boolean; error?: string }> {
-  const db = getSupabaseClient();
+  const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
   const { error, count } = await db.from("produtos").delete({ count: "exact" }).eq("slug", slug);
   if (error) return { ok: false, error: error.message };

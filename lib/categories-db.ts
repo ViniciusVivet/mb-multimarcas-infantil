@@ -24,7 +24,7 @@ export async function getSortedCategories(products: Product[]): Promise<string[]
 export async function updateCategoryPositions(
   names: string[]
 ): Promise<{ ok: boolean; error?: string }> {
-  const db = getSupabaseClient();
+  const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado." };
 
   const rows = names.map((name, i) => ({ name, position: i }));

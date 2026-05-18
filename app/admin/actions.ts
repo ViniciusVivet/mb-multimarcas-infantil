@@ -1,7 +1,7 @@
 "use server";
 
-import { createHmac } from "crypto";
-import { cookies } from "next/headers";
+import { createHmac, timingSafeEqual } from "crypto";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createProduct, updateProduct, deleteProduct, updatePositions } from "@/lib/products-db";
@@ -14,6 +14,49 @@ function deriveSessionToken(password: string) {
   return createHmac("sha256", password).update("mb-admin-session-v1").digest("hex");
 }
 
+const loginAttempts = new Map<string, { count: number; resetAt: number }>();
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const MAX_LOGIN_ATTEMPTS = 8;
+
+function safeEqual(a: string, b: string) {
+  const aBuffer = Buffer.from(a);
+  const bBuffer = Buffer.from(b);
+  return aBuffer.length === bBuffer.length && timingSafeEqual(aBuffer, bBuffer);
+}
+
+async function getRequesterKey() {
+  const headerStore = await headers();
+  return (
+    headerStore.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headerStore.get("x-real-ip") ||
+    "unknown"
+  );
+}
+
+function isLoginRateLimited(key: string) {
+  const now = Date.now();
+  const current = loginAttempts.get(key);
+  if (!current || current.resetAt <= now) {
+    loginAttempts.set(key, { count: 0, resetAt: now + LOGIN_WINDOW_MS });
+    return false;
+  }
+  return current.count >= MAX_LOGIN_ATTEMPTS;
+}
+
+function registerFailedLogin(key: string) {
+  const now = Date.now();
+  const current = loginAttempts.get(key);
+  if (!current || current.resetAt <= now) {
+    loginAttempts.set(key, { count: 1, resetAt: now + LOGIN_WINDOW_MS });
+    return;
+  }
+  loginAttempts.set(key, { ...current, count: current.count + 1 });
+}
+
+function clearFailedLogins(key: string) {
+  loginAttempts.delete(key);
+}
+
 async function getAdminAuthError() {
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) return "ADMIN_PASSWORD não configurado no servidor.";
@@ -21,7 +64,7 @@ async function getAdminAuthError() {
   const cookieStore = await cookies();
   const session = cookieStore.get("mb_admin_session")?.value;
   const expected = deriveSessionToken(adminPassword);
-  if (session !== expected) return "Sessão expirada. Faça login novamente.";
+  if (!session || !safeEqual(session, expected)) return "Sessão expirada. Faça login novamente.";
 
   return null;
 }
@@ -29,15 +72,22 @@ async function getAdminAuthError() {
 export async function loginAction(formData: FormData) {
   const password = formData.get("password") as string;
   const adminPassword = process.env.ADMIN_PASSWORD;
+  const requesterKey = await getRequesterKey();
 
   if (!adminPassword) {
     return { error: "ADMIN_PASSWORD não configurado no servidor." };
   }
 
-  if (password !== adminPassword) {
+  if (isLoginRateLimited(requesterKey)) {
+    return { error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." };
+  }
+
+  if (!safeEqual(password ?? "", adminPassword)) {
+    registerFailedLogin(requesterKey);
     return { error: "Senha incorreta." };
   }
 
+  clearFailedLogins(requesterKey);
   const cookieStore = await cookies();
   cookieStore.set("mb_admin_session", deriveSessionToken(adminPassword), {
     httpOnly: true,
