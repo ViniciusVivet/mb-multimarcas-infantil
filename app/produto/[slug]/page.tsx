@@ -9,17 +9,14 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { ProductActions } from "@/components/ProductActions";
 import { getProductBySlug, getProducts } from "@/lib/products-db";
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export const revalidate = 60;
-
-export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug);
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
   if (!product) return {};
   const image = product.images[0];
   return {
@@ -34,8 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductPage({ params }: Props) {
+  const { slug } = await params;
   const [product, allProducts] = await Promise.all([
-    getProductBySlug(params.slug),
+    getProductBySlug(slug),
     getProducts(),
   ]);
   if (!product) notFound();

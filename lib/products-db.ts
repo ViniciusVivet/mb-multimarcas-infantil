@@ -50,7 +50,10 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (!db) return staticProducts.find((p) => p.slug === slug) ?? null;
   const { data, error } = await db.from("produtos").select("*").eq("slug", slug).limit(1);
   if (error) return staticProducts.find((p) => p.slug === slug) ?? null;
-  if (!data?.length) return null;
+  if (!data?.length) {
+    const products = await getProducts();
+    return products.find((p) => p.slug === slug) ?? null;
+  }
   return data[0] as Product;
 }
 

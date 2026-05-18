@@ -4,11 +4,16 @@ import { getProductBySlug } from "@/lib/products-db";
 import { ProductFormWithPreview } from "../../../_components/ProductFormWithPreview";
 import { atualizarProdutoAction } from "../../../actions";
 
-export default async function EditarProdutoPage({ params }: { params: { slug: string } }) {
-  const produto = await getProductBySlug(params.slug);
+export default async function EditarProdutoPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const produto = await getProductBySlug(slug);
   if (!produto) notFound();
 
-  const action = atualizarProdutoAction.bind(null, params.slug);
+  const action = atualizarProdutoAction.bind(null, slug);
 
   return (
     <div className="min-h-screen px-4 py-8 md:px-8">
