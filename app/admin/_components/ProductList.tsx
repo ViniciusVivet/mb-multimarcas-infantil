@@ -19,6 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Product } from "@/data/products";
+import { parseProductColor } from "@/lib/product-colors";
 import { DeleteButton } from "./DeleteButton";
 import { updatePositionsAction } from "../actions";
 
@@ -66,7 +67,9 @@ function SortableCard({ produto }: { produto: Product }) {
         <p className="text-sm font-semibold text-coral">{produto.price}</p>
         <p className="text-xs text-muted">{produto.sizes.join(", ")}</p>
         {produto.colors?.length ? (
-          <p className="text-xs text-muted">Cores: {produto.colors.join(", ")}</p>
+          <p className="text-xs text-muted">
+            Cores: {produto.colors.map((color) => parseProductColor(color).name).join(", ")}
+          </p>
         ) : null}
       </div>
 

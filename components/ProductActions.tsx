@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Product } from "@/data/products";
 import { getWhatsappLink } from "@/data/store";
-import { getProductColor } from "@/lib/product-colors";
+import { parseProductColor } from "@/lib/product-colors";
 
 const whatsappIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -21,7 +21,7 @@ export function ProductActions({ product }: { product: Product }) {
   const link = getWhatsappLink(
     product.name,
     selectedSize ?? undefined,
-    selectedColor ?? undefined
+    selectedColor ? parseProductColor(selectedColor).name : undefined
   );
 
   return (
@@ -58,12 +58,12 @@ export function ProductActions({ product }: { product: Product }) {
         <div className="mt-4">
           <div className="rounded-2xl border-2 border-line bg-paper px-4 py-3">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
-              Cor {selectedColor ? <span className="text-coral">— {selectedColor} selecionada</span> : ""}
+              Cor {selectedColor ? <span className="text-coral">— {parseProductColor(selectedColor).name} selecionada</span> : ""}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {colors.map((color) => (
                 (() => {
-                  const swatch = getProductColor(color);
+                  const swatch = parseProductColor(color);
                   const active = color === selectedColor;
                   return (
                     <button
@@ -81,7 +81,7 @@ export function ProductActions({ product }: { product: Product }) {
                         style={{ background: swatch?.hex ?? "#e5e7eb" }}
                         aria-hidden="true"
                       />
-                      {color}
+                      {swatch.name}
                     </button>
                   );
                 })()

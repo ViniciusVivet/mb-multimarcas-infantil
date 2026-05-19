@@ -28,6 +28,25 @@ export const PRODUCT_COLORS: ProductColor[] = [
   { name: "Estampado", hex: "repeating-linear-gradient(45deg, #f9a8d4 0 6px, #93c5fd 6px 12px, #fde047 12px 18px)" },
 ];
 
+export function encodeCustomProductColor(name: string, hex: string) {
+  return `custom:${name.replace(/[|,]/g, " ").trim()}|${hex}`;
+}
+
+export function parseProductColor(value: string): ProductColor {
+  if (value.startsWith("custom:")) {
+    const [rawName, rawHex] = value.slice("custom:".length).split("|");
+    return {
+      name: rawName?.trim() || "Cor personalizada",
+      hex: /^#[0-9a-f]{6}$/i.test(rawHex ?? "") ? rawHex : "#e5e7eb",
+    };
+  }
+
+  return PRODUCT_COLORS.find((color) => color.name === value) ?? {
+    name: value,
+    hex: "#e5e7eb",
+  };
+}
+
 export function getProductColor(name: string) {
-  return PRODUCT_COLORS.find((color) => color.name === name);
+  return parseProductColor(name);
 }

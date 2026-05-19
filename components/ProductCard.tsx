@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/products";
-import { getProductColor } from "@/lib/product-colors";
+import { parseProductColor } from "@/lib/product-colors";
 
 type Props = { product: Product };
 
@@ -64,7 +64,7 @@ export function ProductCard({ product }: Props) {
         {product.colors?.length ? (
           <div className="mt-2 flex flex-wrap gap-1">
             {product.colors.slice(0, 3).map((color) => {
-              const swatch = getProductColor(color);
+              const swatch = parseProductColor(color);
               return (
                 <span
                   key={color}
@@ -75,7 +75,7 @@ export function ProductCard({ product }: Props) {
                     style={{ background: swatch?.hex ?? "#e5e7eb" }}
                     aria-hidden="true"
                   />
-                  {color}
+                  {swatch.name}
                 </span>
               );
             })}

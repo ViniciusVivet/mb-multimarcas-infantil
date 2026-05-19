@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { PRODUCT_COLORS } from "@/lib/product-colors";
+import {
+  PRODUCT_COLORS,
+  encodeCustomProductColor,
+  parseProductColor,
+} from "@/lib/product-colors";
 
 type Props = {
   defaultColors?: string[];
@@ -9,6 +13,8 @@ type Props = {
 
 export function ColorPicker({ defaultColors = [] }: Props) {
   const [selected, setSelected] = useState<string[]>(defaultColors);
+  const [customName, setCustomName] = useState("");
+  const [customHex, setCustomHex] = useState("#f9a8d4");
 
   function toggleColor(name: string) {
     setSelected((current) =>
@@ -17,6 +23,16 @@ export function ColorPicker({ defaultColors = [] }: Props) {
         : [...current, name]
     );
   }
+
+  function addCustomColor() {
+    const name = customName.trim();
+    if (!name) return;
+    const value = encodeCustomProductColor(name, customHex);
+    setSelected((current) => (current.includes(value) ? current : [...current, value]));
+    setCustomName("");
+  }
+
+  const customSelected = selected.filter((color) => color.startsWith("custom:"));
 
   return (
     <div>
@@ -47,8 +63,56 @@ export function ColorPicker({ defaultColors = [] }: Props) {
           );
         })}
       </div>
+      <div className="mt-3 rounded-2xl border border-line bg-paper p-3">
+        <p className="text-xs font-extrabold text-ink">Outra cor</p>
+        <div className="mt-2 grid gap-2 sm:grid-cols-[44px_1fr_auto]">
+          <input
+            type="color"
+            value={customHex}
+            onChange={(e) => setCustomHex(e.target.value)}
+            className="h-11 w-full cursor-pointer rounded-xl border-2 border-line bg-white p-1"
+            aria-label="Escolher amostra da cor personalizada"
+          />
+          <input
+            value={customName}
+            onChange={(e) => setCustomName(e.target.value)}
+            placeholder="Ex: Coral neon, Dourado, Xadrez azul"
+            className="input w-full"
+          />
+          <button
+            type="button"
+            onClick={addCustomColor}
+            className="rounded-xl bg-ink px-4 py-2 text-xs font-extrabold text-white transition-colors hover:bg-coral"
+          >
+            Adicionar
+          </button>
+        </div>
+        {customSelected.length ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {customSelected.map((value) => {
+              const color = parseProductColor(value);
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => toggleColor(value)}
+                  className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-ink"
+                >
+                  <span
+                    className="h-4 w-4 rounded-full border border-black/10"
+                    style={{ background: color.hex }}
+                    aria-hidden="true"
+                  />
+                  {color.name}
+                  <span className="text-coral">×</span>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
       <p className="mt-1 text-xs text-muted">
-        Clique nas cores disponíveis. Se não selecionar nenhuma, o cliente escolhe apenas o tamanho.
+        Clique nas cores disponíveis ou adicione uma cor personalizada. Se não selecionar nenhuma, o cliente escolhe apenas o tamanho.
       </p>
     </div>
   );
