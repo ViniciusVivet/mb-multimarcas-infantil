@@ -29,13 +29,15 @@ create table produtos (
   price       text not null,
   description text not null,
   sizes       text[] not null default '{}',
+  colors      text[] not null default '{}',
   images      text[] not null default '{}',
   videos      text[] not null default '{}',
   position    integer,
   created_at  timestamptz not null default now()
 );
 
--- Se a tabela já existe, adicione a coluna position:
+-- Se a tabela já existe, adicione as colunas novas:
+-- alter table produtos add column if not exists colors text[] not null default '{}';
 -- alter table produtos add column if not exists position integer;
 
 alter table produtos enable row level security;

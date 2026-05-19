@@ -4,6 +4,7 @@ export type Product = {
   category: string;
   price: string;
   sizes: string[];
+  colors?: string[];
   description: string;
   images: string[];
   videos?: string[];
@@ -27,6 +28,7 @@ export const products: Product[] = [
     category: "Vestidos",
     price: "R$ 79,90",
     sizes: ["2", "4", "6", "8"],
+    colors: ["Rosa", "Branco"],
     description: "Vestido delicado com estampa floral, ideal para festas, aniversários e ocasiões especiais. Tecido leve e confortável.",
     images: [IMG.A],
   },
@@ -36,6 +38,7 @@ export const products: Product[] = [
     category: "Conjuntos",
     price: "R$ 85,90",
     sizes: ["2", "4", "6", "8"],
+    colors: ["Colorido"],
     description: "Conjunto colorido de malha com estampa tie-dye moderna. Confortável, estiloso e cheio de personalidade.",
     images: [IMG.B],
   },
@@ -45,6 +48,7 @@ export const products: Product[] = [
     category: "Bebê",
     price: "R$ 54,90",
     sizes: ["RN", "P", "M", "G"],
+    colors: ["Azul", "Cinza"],
     description: "Macacão macio com listras delicadas, perfeito para os primeiros meses. Botões fáceis de abrir.",
     images: [IMG.C],
   },
@@ -54,6 +58,7 @@ export const products: Product[] = [
     category: "Conjuntos",
     price: "R$ 99,90",
     sizes: ["4", "6", "8", "10", "12"],
+    colors: ["Preto", "Cinza"],
     description: "Conjunto de moletom quentinho com estampa divertida. Ideal para o inverno e dias mais frescos.",
     images: [IMG.D],
   },
@@ -63,6 +68,7 @@ export const products: Product[] = [
     category: "Meninas",
     price: "R$ 89,90",
     sizes: ["2", "4", "6", "8"],
+    colors: ["Jeans claro"],
     description: "Salopete jeans charmosa com bordado floral. Versátil para montar looks incríveis no dia a dia.",
     images: [IMG.E],
   },
@@ -72,6 +78,7 @@ export const products: Product[] = [
     category: "Meninas",
     price: "R$ 64,90",
     sizes: ["2", "4", "6", "8", "10"],
+    colors: ["Rosa", "Lilás"],
     description: "Saia volumosa de tule com camadas coloridas. Toda princesinha vai adorar girar com essa saia!",
     images: [IMG.F],
   },
@@ -81,6 +88,7 @@ export const products: Product[] = [
     category: "Meninos",
     price: "R$ 55,90",
     sizes: ["2", "4", "6", "8", "10"],
+    colors: ["Verde", "Caqui"],
     description: "Bermuda cargo resistente com bolsos laterais. Ideal para aventuras no parque e brincadeiras ao ar livre.",
     images: [IMG.G],
   },
@@ -90,6 +98,7 @@ export const products: Product[] = [
     category: "Acessórios",
     price: "R$ 22,90",
     sizes: ["Único"],
+    colors: ["Rosa", "Branco", "Vermelho"],
     description: "Tiara delicada com laço de cetim para completar o look com charme. Disponível em várias cores.",
     images: [IMG.H],
   },

@@ -12,8 +12,16 @@ const whatsappIcon = (
 
 export function ProductActions({ product }: { product: Product }) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const colors = product.colors ?? [];
+  const needsColor = colors.length > 0;
+  const canContact = !!selectedSize && (!needsColor || !!selectedColor);
 
-  const link = getWhatsappLink(product.name, selectedSize ?? undefined);
+  const link = getWhatsappLink(
+    product.name,
+    selectedSize ?? undefined,
+    selectedColor ?? undefined
+  );
 
   return (
     <>
@@ -45,6 +53,35 @@ export function ProductActions({ product }: { product: Product }) {
         </div>
       </div>
 
+      {needsColor && (
+        <div className="mt-4">
+          <div className="rounded-2xl border-2 border-line bg-paper px-4 py-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+              Cor {selectedColor ? <span className="text-coral">— {selectedColor} selecionada</span> : ""}
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {colors.map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  onClick={() => setSelectedColor(color === selectedColor ? null : color)}
+                  className={`rounded-xl border-2 px-3 py-1.5 text-sm font-extrabold transition-all duration-150 active:scale-95 ${
+                    color === selectedColor
+                      ? "border-coral bg-coral text-white shadow-md"
+                      : "border-line bg-white text-ink hover:border-coral hover:text-coral"
+                  }`}
+                >
+                  {color}
+                </button>
+              ))}
+            </div>
+            {!selectedColor && (
+              <p className="mt-2 text-xs text-muted">Selecione a cor desejada</p>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Aviso */}
       <div className="mt-4 rounded-2xl bg-mint/10 px-4 py-3 border border-mint/30">
         <p className="text-sm font-semibold text-mint">
@@ -55,15 +92,15 @@ export function ProductActions({ product }: { product: Product }) {
       {/* CTA desktop */}
       <a
         className={`button mt-6 hidden w-full justify-center gap-2 text-base md:inline-flex ${
-          selectedSize ? "button-primary" : "button-secondary pointer-events-none opacity-60"
+          canContact ? "button-primary" : "button-secondary pointer-events-none opacity-60"
         }`}
-        href={selectedSize ? link : undefined}
+        href={canContact ? link : undefined}
         target="_blank"
         rel="noreferrer"
-        aria-disabled={!selectedSize}
+        aria-disabled={!canContact}
       >
         {whatsappIcon}
-        {selectedSize ? `Quero o tamanho ${selectedSize}!` : "Selecione um tamanho"}
+        {canContact ? "Chamar no WhatsApp" : needsColor ? "Selecione tamanho e cor" : "Selecione um tamanho"}
       </a>
 
       {/* CTA mobile — fixo no rodapé */}
@@ -73,15 +110,15 @@ export function ProductActions({ product }: { product: Product }) {
       >
         <a
           className={`button w-full justify-center gap-2 ${
-            selectedSize ? "button-primary" : "button-secondary pointer-events-none opacity-60"
+            canContact ? "button-primary" : "button-secondary pointer-events-none opacity-60"
           }`}
-          href={selectedSize ? link : undefined}
+          href={canContact ? link : undefined}
           target="_blank"
           rel="noreferrer"
-          aria-disabled={!selectedSize}
+          aria-disabled={!canContact}
         >
           {whatsappIcon}
-          {selectedSize ? `Quero o tamanho ${selectedSize}!` : "Selecione um tamanho"}
+          {canContact ? "Chamar no WhatsApp" : needsColor ? "Selecione tamanho e cor" : "Selecione um tamanho"}
         </a>
       </div>
     </>

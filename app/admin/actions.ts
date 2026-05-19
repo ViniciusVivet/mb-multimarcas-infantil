@@ -127,6 +127,11 @@ function parseFormProduct(formData: FormData) {
     .map((s) => s.trim())
     .filter(Boolean);
 
+  const colors = ((formData.get("colors") as string | null) ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   let images: string[] = [];
   try {
     images = JSON.parse(formData.get("images") as string) as string[];
@@ -145,6 +150,7 @@ function parseFormProduct(formData: FormData) {
     price: formData.get("price") as string,
     description: formData.get("description") as string,
     sizes,
+    colors,
     images,
     videos,
   };

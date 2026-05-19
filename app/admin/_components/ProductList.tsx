@@ -65,6 +65,9 @@ function SortableCard({ produto }: { produto: Product }) {
         <p className="font-bold leading-tight text-ink">{produto.name}</p>
         <p className="text-sm font-semibold text-coral">{produto.price}</p>
         <p className="text-xs text-muted">{produto.sizes.join(", ")}</p>
+        {produto.colors?.length ? (
+          <p className="text-xs text-muted">Cores: {produto.colors.join(", ")}</p>
+        ) : null}
       </div>
 
       <div className="flex gap-2 border-t border-line px-4 py-3">

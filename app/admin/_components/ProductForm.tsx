@@ -81,6 +81,17 @@ export function ProductForm({ action, defaultValues, submitLabel }: Props) {
         <p className="mt-1 text-xs text-muted">Separe os tamanhos por vírgula</p>
       </div>
 
+      <div>
+        <label className="mb-1.5 block text-sm font-semibold text-ink">Cores disponíveis</label>
+        <input
+          name="colors"
+          defaultValue={defaultValues?.colors?.join(", ")}
+          placeholder="Ex: Rosa, Azul, Branco, Jeans claro"
+          className="input w-full"
+        />
+        <p className="mt-1 text-xs text-muted">Separe as cores por vírgula</p>
+      </div>
+
       {/* Descrição */}
       <div>
         <label className="mb-1.5 block text-sm font-semibold text-ink">Descrição *</label>

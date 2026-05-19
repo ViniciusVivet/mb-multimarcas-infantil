@@ -60,6 +60,23 @@ export function ProductCard({ product }: Props) {
             {product.sizes.slice(0, 3).join(" · ")}{product.sizes.length > 3 ? "…" : ""}
           </span>
         </div>
+        {product.colors?.length ? (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {product.colors.slice(0, 3).map((color) => (
+              <span
+                key={color}
+                className="rounded-full border border-line bg-paper px-2 py-0.5 text-[10px] font-bold text-muted"
+              >
+                {color}
+              </span>
+            ))}
+            {product.colors.length > 3 ? (
+              <span className="rounded-full border border-line bg-paper px-2 py-0.5 text-[10px] font-bold text-muted">
+                +{product.colors.length - 3}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
         <Link
           className="button button-primary mt-2.5 w-full justify-center text-xs py-2 px-3 min-h-9 gap-1.5"
           href={`/produto/${product.slug}`}
