@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Product } from "@/data/products";
 import { getWhatsappLink } from "@/data/store";
+import { getProductColor } from "@/lib/product-colors";
 
 const whatsappIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -61,18 +62,29 @@ export function ProductActions({ product }: { product: Product }) {
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {colors.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={() => setSelectedColor(color === selectedColor ? null : color)}
-                  className={`rounded-xl border-2 px-3 py-1.5 text-sm font-extrabold transition-all duration-150 active:scale-95 ${
-                    color === selectedColor
-                      ? "border-coral bg-coral text-white shadow-md"
-                      : "border-line bg-white text-ink hover:border-coral hover:text-coral"
-                  }`}
-                >
-                  {color}
-                </button>
+                (() => {
+                  const swatch = getProductColor(color);
+                  const active = color === selectedColor;
+                  return (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => setSelectedColor(active ? null : color)}
+                      className={`flex items-center gap-2 rounded-xl border-2 px-3 py-1.5 text-sm font-extrabold transition-all duration-150 active:scale-95 ${
+                        active
+                          ? "border-coral bg-coral text-white shadow-md"
+                          : "border-line bg-white text-ink hover:border-coral hover:text-coral"
+                      }`}
+                    >
+                      <span
+                        className="h-4 w-4 rounded-full border border-black/10 shadow-inner"
+                        style={{ background: swatch?.hex ?? "#e5e7eb" }}
+                        aria-hidden="true"
+                      />
+                      {color}
+                    </button>
+                  );
+                })()
               ))}
             </div>
             {!selectedColor && (

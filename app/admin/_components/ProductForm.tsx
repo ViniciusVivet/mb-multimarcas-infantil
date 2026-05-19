@@ -3,6 +3,7 @@
 import { useFormState, useFormStatus } from "react-dom";
 import type { Product } from "@/data/products";
 import { PhotoUploader } from "./PhotoUploader";
+import { ColorPicker } from "./ColorPicker";
 
 type Props = {
   action: (prev: unknown, formData: FormData) => Promise<{ error?: string }>;
@@ -83,13 +84,7 @@ export function ProductForm({ action, defaultValues, submitLabel }: Props) {
 
       <div>
         <label className="mb-1.5 block text-sm font-semibold text-ink">Cores disponíveis</label>
-        <input
-          name="colors"
-          defaultValue={defaultValues?.colors?.join(", ")}
-          placeholder="Ex: Rosa, Azul, Branco, Jeans claro"
-          className="input w-full"
-        />
-        <p className="mt-1 text-xs text-muted">Separe as cores por vírgula</p>
+        <ColorPicker defaultColors={defaultValues?.colors} />
       </div>
 
       {/* Descrição */}

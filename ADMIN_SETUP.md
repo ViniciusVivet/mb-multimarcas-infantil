@@ -4,6 +4,7 @@
 
 - Acesse `/admin` para fazer login
 - Adicione, edite e exclua produtos diretamente pelo navegador
+- Selecione cores por uma paleta visual, sem precisar digitar nomes manualmente
 - Produtos salvos aparecem no site em até 60 segundos
 
 ---

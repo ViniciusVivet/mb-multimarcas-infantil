@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/products";
+import { getProductColor } from "@/lib/product-colors";
 
 type Props = { product: Product };
 
@@ -62,14 +63,22 @@ export function ProductCard({ product }: Props) {
         </div>
         {product.colors?.length ? (
           <div className="mt-2 flex flex-wrap gap-1">
-            {product.colors.slice(0, 3).map((color) => (
-              <span
-                key={color}
-                className="rounded-full border border-line bg-paper px-2 py-0.5 text-[10px] font-bold text-muted"
-              >
-                {color}
-              </span>
-            ))}
+            {product.colors.slice(0, 3).map((color) => {
+              const swatch = getProductColor(color);
+              return (
+                <span
+                  key={color}
+                  className="inline-flex items-center gap-1 rounded-full border border-line bg-paper px-2 py-0.5 text-[10px] font-bold text-muted"
+                >
+                  <span
+                    className="h-2.5 w-2.5 rounded-full border border-black/10"
+                    style={{ background: swatch?.hex ?? "#e5e7eb" }}
+                    aria-hidden="true"
+                  />
+                  {color}
+                </span>
+              );
+            })}
             {product.colors.length > 3 ? (
               <span className="rounded-full border border-line bg-paper px-2 py-0.5 text-[10px] font-bold text-muted">
                 +{product.colors.length - 3}
