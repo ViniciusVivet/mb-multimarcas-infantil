@@ -30,6 +30,9 @@ function SubmitButton({ label }: { label: string }) {
 export function ProductForm({ action, categories, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
   const [dismissedError, setDismissedError] = useState<string | null>(null);
+  const categoryOptions = defaultValues?.category && !categories.includes(defaultValues.category)
+    ? [...categories, defaultValues.category]
+    : categories;
 
   useEffect(() => {
     setDismissedError(null);
@@ -63,7 +66,7 @@ export function ProductForm({ action, categories, defaultValues, submitLabel }: 
           <label className="mb-1.5 block text-sm font-semibold text-ink">Categoria *</label>
           <select name="category" required defaultValue={defaultValues?.category} className="input w-full">
             <option value="">Selecione...</option>
-            {categories.map((c) => (
+            {categoryOptions.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>

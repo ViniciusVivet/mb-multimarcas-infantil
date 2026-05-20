@@ -227,7 +227,7 @@ export async function updateCategoryPositionsAction(
   return {};
 }
 
-export async function createCategoryAction(formData: FormData): Promise<{ error?: string }> {
+export async function createCategoryAction(formData: FormData): Promise<{ name?: string; error?: string }> {
   const authError = await getAdminAuthError();
   if (authError) return { error: authError };
 
@@ -237,7 +237,7 @@ export async function createCategoryAction(formData: FormData): Promise<{ error?
   revalidatePath("/");
   revalidatePath("/admin/categorias");
   revalidatePath("/admin/produtos/novo");
-  return {};
+  return { name: result.name };
 }
 
 export async function deleteCategoryAction(name: string): Promise<{ error?: string }> {

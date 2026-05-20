@@ -3,20 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
-
-const categoryEmojis: Record<string, string> = {
-  Vestidos: "👗",
-  Conjuntos: "👚",
-  "Bebê": "🍼",
-  Meninas: "🎀",
-  Meninos: "⚽",
-  Camisetas: "👕",
-  "Calças": "👖",
-  "Macacões": "🐣",
-  Casacos: "🧥",
-  Shorts: "🩳",
-  "Acessórios": "✨",
-};
+import { categoryEmojis } from "@/lib/category-config";
 
 export function Catalog({ products, categories }: { products: Product[]; categories: string[] }) {
 

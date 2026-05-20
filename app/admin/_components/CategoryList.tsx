@@ -21,25 +21,8 @@ import {
   deleteCategoryAction,
   updateCategoryPositionsAction,
 } from "../actions";
-import { defaultCategories } from "@/lib/categories-db";
+import { defaultCategories, categoryEmojis, normalizeCategoryKey } from "@/lib/category-config";
 import { AdminNotice } from "./AdminNotice";
-
-const categoryEmojis: Record<string, string> = {
-  Vestidos: "👗",
-  Conjuntos: "👚",
-  "Bebê": "🍼",
-  Meninas: "🎀",
-  Meninos: "⚽",
-  Camisetas: "👕",
-  "Calças": "👖",
-  "Macacões": "🐣",
-  Casacos: "🧥",
-  Shorts: "🩳",
-  "Acessórios": "✨",
-  Calçados: "👟",
-  Havaianas: "🩴",
-  "Body temático": "⭐",
-};
 
 function SortableRow({
   name,
@@ -70,6 +53,11 @@ function SortableRow({
       <span className="w-6 text-center text-sm font-black text-muted/50">{index + 1}</span>
       <span className="text-xl">{categoryEmojis[name] ?? "🏷️"}</span>
       <span className="flex-1 font-bold text-ink">{name}</span>
+      {!canDelete ? (
+        <span className="rounded-full bg-paper px-2 py-1 text-[10px] font-black uppercase tracking-wide text-muted">
+          Padrão
+        </span>
+      ) : null}
       {canDelete ? (
         confirming ? (
           <div className="flex gap-1">
@@ -179,11 +167,16 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
       });
       return;
     }
-    setCategories((current) => (current.includes(name) ? current : [...current, name]));
+    const savedName = result.name ?? name;
+    setCategories((current) =>
+      current.some((category) => normalizeCategoryKey(category) === normalizeCategoryKey(savedName))
+        ? current
+        : [...current, savedName]
+    );
     setNewCategory("");
     setNotice({
       title: "Categoria adicionada",
-      message: `"${name}" já aparece no cadastro e edição dos produtos.`,
+      message: `"${savedName}" já aparece no cadastro e edição dos produtos.`,
       variant: "success",
     });
   }
@@ -263,7 +256,9 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
                 key={cat}
                 name={cat}
                 index={i}
-                canDelete={!defaultCategories.includes(cat)}
+                canDelete={!defaultCategories.some(
+                  (category) => normalizeCategoryKey(category) === normalizeCategoryKey(cat)
+                )}
                 onDelete={handleDeleteCategory}
               />
             ))}

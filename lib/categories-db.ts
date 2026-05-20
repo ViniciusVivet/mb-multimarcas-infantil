@@ -1,23 +1,14 @@
 import { getSupabaseClient } from "./supabase";
 import type { Product } from "@/data/products";
 import { friendlyAdminError } from "./admin-errors";
-
-export const defaultCategories = [
-  "Vestidos",
-  "Conjuntos",
-  "Camisetas",
-  "Calças",
-  "Macacões",
-  "Acessórios",
-  "Casacos",
-  "Shorts",
-  "Calçados",
-  "Havaianas",
-  "Body temático",
-];
+import {
+  canonicalCategoryName,
+  defaultCategories,
+  uniqueCategories,
+} from "./category-config";
 
 export function getUniqueCategories(products: Product[]): string[] {
-  return Array.from(new Set(products.map((p) => p.category)));
+  return uniqueCategories(products.map((p) => p.category));
 }
 
 function sortWithPosition(categories: string[], positions: Map<string, number>) {
@@ -48,7 +39,7 @@ export async function getSortedCategories(products: Product[]): Promise<string[]
 export async function getAdminCategories(products: Product[]): Promise<string[]> {
   const productCategories = getUniqueCategories(products);
   const db = getSupabaseClient();
-  if (!db) return Array.from(new Set([...defaultCategories, ...productCategories]));
+  if (!db) return uniqueCategories([...defaultCategories, ...productCategories]);
 
   const { data } = await db
     .from("categorias")
@@ -58,7 +49,7 @@ export async function getAdminCategories(products: Product[]): Promise<string[]>
   const savedCategories = data?.map((category) => category.name) ?? [];
   const positions = new Map((data ?? []).map((category) => [category.name, category.position]));
   return sortWithPosition(
-    Array.from(new Set([...defaultCategories, ...savedCategories, ...productCategories])),
+    uniqueCategories([...defaultCategories, ...savedCategories, ...productCategories]),
     positions
   );
 }
@@ -66,11 +57,11 @@ export async function getAdminCategories(products: Product[]): Promise<string[]>
 export async function createCategory(
   name: string,
   position?: number
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<{ ok: boolean; name?: string; error?: string }> {
   const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado." };
 
-  const normalized = name.trim().replace(/\s+/g, " ");
+  const normalized = canonicalCategoryName(name);
   if (normalized.length < 2) return { ok: false, error: "Informe uma categoria válida." };
   if (normalized.length > 40) return { ok: false, error: "Categoria muito longa." };
 
@@ -81,7 +72,7 @@ export async function createCategory(
       { onConflict: "name" }
     );
   if (error) return { ok: false, error: friendlyAdminError("Não consegui salvar essa categoria") };
-  return { ok: true };
+  return { ok: true, name: normalized };
 }
 
 export async function deleteCategory(

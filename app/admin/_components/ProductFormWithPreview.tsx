@@ -33,6 +33,9 @@ export function ProductFormWithPreview({ action, categories, defaultValues, subm
   const [state, formAction] = useFormState(action, undefined);
   const [uploading, setUploading] = useState(false);
   const [dismissedError, setDismissedError] = useState<string | null>(null);
+  const categoryOptions = defaultValues?.category && !categories.includes(defaultValues.category)
+    ? [...categories, defaultValues.category]
+    : categories;
   const [preview, setPreview] = useState({
     name: defaultValues?.name ?? "",
     price: defaultValues?.price ?? "",
@@ -82,7 +85,7 @@ export function ProductFormWithPreview({ action, categories, defaultValues, subm
                 onChange={(e) => setPreview((p) => ({ ...p, category: e.target.value }))}
               >
                 <option value="">Selecione...</option>
-                {categories.map((c) => (
+                {categoryOptions.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
