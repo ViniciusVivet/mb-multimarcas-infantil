@@ -92,7 +92,7 @@ export async function deleteCategory(
   if (products.some((product) => product.category === name)) {
     return {
       ok: false,
-      error: "Essa categoria está sendo usada por produtos. Mude os produtos de categoria antes de excluir.",
+      error: "Essa categoria ainda tem produtos cadastrados. Para apagar, edite esses produtos primeiro e escolha outra categoria para eles. Depois volte aqui e tente excluir novamente.",
     };
   }
 

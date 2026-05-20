@@ -21,9 +21,16 @@ import { CSS } from "@dnd-kit/utilities";
 import type { Product } from "@/data/products";
 import { parseProductColor } from "@/lib/product-colors";
 import { DeleteButton } from "./DeleteButton";
+import { AdminNotice } from "./AdminNotice";
 import { updatePositionsAction } from "../actions";
 
-function SortableCard({ produto }: { produto: Product }) {
+function SortableCard({
+  produto,
+  onError,
+}: {
+  produto: Product;
+  onError: (message: string) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: produto.slug });
 
@@ -87,7 +94,7 @@ function SortableCard({ produto }: { produto: Product }) {
         >
           Editar
         </Link>
-        <DeleteButton slug={produto.slug} name={produto.name} />
+        <DeleteButton slug={produto.slug} name={produto.name} onError={onError} />
       </div>
     </div>
   );
@@ -96,8 +103,11 @@ function SortableCard({ produto }: { produto: Product }) {
 export function ProductList({ produtos: initial }: { produtos: Product[] }) {
   const [produtos, setProdutos] = useState(initial);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{
+    title: string;
+    message?: string;
+    variant: "success" | "error" | "info";
+  } | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -115,15 +125,21 @@ export function ProductList({ produtos: initial }: { produtos: Product[] }) {
     setProdutos(reordered);
 
     setSaving(true);
-    setSaved(false);
-    setError(null);
+    setNotice(null);
     const result = await updatePositionsAction(reordered.map((p) => p.slug));
     setSaving(false);
     if (result.error) {
-      setError(result.error);
+      setNotice({
+        title: "Não consegui salvar a ordem",
+        message: result.error,
+        variant: "error",
+      });
     } else {
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      setNotice({
+        title: "Ordem salva",
+        message: "Os produtos já estão organizados no site.",
+        variant: "success",
+      });
     }
   }
 
@@ -139,12 +155,18 @@ export function ProductList({ produtos: initial }: { produtos: Product[] }) {
 
   return (
     <div>
+      <AdminNotice
+        open={!!notice}
+        title={notice?.title ?? ""}
+        message={notice?.message}
+        variant={notice?.variant}
+        onClose={() => setNotice(null)}
+      />
+
       {/* Status de salvamento */}
       <div className="mb-4 flex items-center gap-2 text-xs font-semibold">
         {saving && <span className="text-muted">Salvando ordem...</span>}
-        {saved && <span className="text-mint">Ordem salva!</span>}
-        {error && <span className="text-red-500">{error}</span>}
-        {!saving && !saved && !error && (
+        {!saving && (
           <span className="text-muted/60">Arraste os cards para reordenar os produtos no site</span>
         )}
       </div>
@@ -153,7 +175,17 @@ export function ProductList({ produtos: initial }: { produtos: Product[] }) {
         <SortableContext items={produtos.map((p) => p.slug)} strategy={rectSortingStrategy}>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {produtos.map((produto) => (
-              <SortableCard key={produto.slug} produto={produto} />
+              <SortableCard
+                key={produto.slug}
+                produto={produto}
+                onError={(message) =>
+                  setNotice({
+                    title: "Não consegui excluir",
+                    message,
+                    variant: "error",
+                  })
+                }
+              />
             ))}
           </div>
         </SortableContext>

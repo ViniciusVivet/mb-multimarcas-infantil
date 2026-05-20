@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import type { Product } from "@/data/products";
 import { PhotoUploader } from "./PhotoUploader";
 import { ProductPreview } from "./ProductPreview";
 import { ColorPicker } from "./ColorPicker";
+import { AdminNotice } from "./AdminNotice";
 
 type Props = {
   action: (prev: unknown, formData: FormData) => Promise<{ error?: string }>;
@@ -31,6 +32,7 @@ function SubmitButton({ label, uploading }: { label: string; uploading: boolean 
 export function ProductFormWithPreview({ action, categories, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
   const [uploading, setUploading] = useState(false);
+  const [dismissedError, setDismissedError] = useState<string | null>(null);
   const [preview, setPreview] = useState({
     name: defaultValues?.name ?? "",
     price: defaultValues?.price ?? "",
@@ -38,8 +40,20 @@ export function ProductFormWithPreview({ action, categories, defaultValues, subm
     imageUrl: defaultValues?.images?.[0] ?? "",
   });
 
+  useEffect(() => {
+    setDismissedError(null);
+  }, [state?.error]);
+
   return (
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+      <AdminNotice
+        open={!!state?.error && dismissedError !== state.error}
+        title="Não consegui salvar o produto"
+        message={state?.error}
+        variant="error"
+        onClose={() => setDismissedError(state?.error ?? null)}
+      />
+
       {/* Formulário */}
       <div className="min-w-0 flex-1">
         <form action={formAction} className="flex flex-col gap-5">
@@ -146,12 +160,6 @@ export function ProductFormWithPreview({ action, categories, defaultValues, subm
               Suba o vídeo no YouTube (pode ser não listado) e cole o link aqui
             </p>
           </div>
-
-          {state?.error && (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-              Erro: {state.error}
-            </p>
-          )}
 
           <SubmitButton label={submitLabel} uploading={uploading} />
         </form>

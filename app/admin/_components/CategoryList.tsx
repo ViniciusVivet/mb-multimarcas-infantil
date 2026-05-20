@@ -22,6 +22,7 @@ import {
   updateCategoryPositionsAction,
 } from "../actions";
 import { defaultCategories } from "@/lib/categories-db";
+import { AdminNotice } from "./AdminNotice";
 
 const categoryEmojis: Record<string, string> = {
   Vestidos: "👗",
@@ -95,8 +96,11 @@ function SortableRow({
 export function CategoryList({ categories: initial }: { categories: string[] }) {
   const [categories, setCategories] = useState(initial);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{
+    title: string;
+    message?: string;
+    variant: "success" | "error" | "info";
+  } | null>(null);
   const [newCategory, setNewCategory] = useState("");
 
   const sensors = useSensors(
@@ -115,15 +119,21 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
     setCategories(reordered);
 
     setSaving(true);
-    setSaved(false);
-    setError(null);
+    setNotice(null);
     const result = await updateCategoryPositionsAction(reordered);
     setSaving(false);
     if (result.error) {
-      setError(result.error);
+      setNotice({
+        title: "Não consegui salvar a ordem",
+        message: result.error,
+        variant: "error",
+      });
     } else {
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      setNotice({
+        title: "Ordem salva",
+        message: "As categorias já estão organizadas no catálogo.",
+        variant: "success",
+      });
     }
   }
 
@@ -132,41 +142,62 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
     if (!name) return;
 
     setSaving(true);
-    setSaved(false);
-    setError(null);
+    setNotice(null);
     const formData = new FormData();
     formData.set("name", name);
     const result = await createCategoryAction(formData);
     setSaving(false);
     if (result.error) {
-      setError(result.error);
+      setNotice({
+        title: "Não consegui adicionar",
+        message: result.error,
+        variant: "error",
+      });
       return;
     }
     setCategories((current) => (current.includes(name) ? current : [...current, name]));
     setNewCategory("");
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setNotice({
+      title: "Categoria adicionada",
+      message: `"${name}" já aparece no cadastro e edição dos produtos.`,
+      variant: "success",
+    });
   }
 
   async function handleDeleteCategory(name: string) {
     if (!window.confirm(`Excluir a categoria "${name}"?`)) return;
 
     setSaving(true);
-    setSaved(false);
-    setError(null);
+    setNotice(null);
     const result = await deleteCategoryAction(name);
     setSaving(false);
     if (result.error) {
-      setError(result.error);
+      const usedByProducts = result.error.includes("produtos cadastrados");
+      setNotice({
+        title: usedByProducts ? "Categoria com produtos" : "Não consegui excluir",
+        message: result.error,
+        variant: "error",
+      });
       return;
     }
     setCategories((current) => current.filter((category) => category !== name));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setNotice({
+      title: "Categoria excluída",
+      message: `"${name}" saiu da lista de categorias.`,
+      variant: "success",
+    });
   }
 
   return (
     <div>
+      <AdminNotice
+        open={!!notice}
+        title={notice?.title ?? ""}
+        message={notice?.message}
+        variant={notice?.variant}
+        onClose={() => setNotice(null)}
+      />
+
       <div className="mb-5 rounded-3xl bg-white p-4 shadow-soft">
         <label className="mb-2 block text-sm font-bold text-ink">Adicionar categoria</label>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -197,9 +228,7 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
 
       <div className="mb-4 flex items-center gap-2 text-xs font-semibold">
         {saving && <span className="text-muted">Salvando ordem...</span>}
-        {saved && <span className="text-mint">Ordem salva!</span>}
-        {error && <span className="text-red-500">{error}</span>}
-        {!saving && !saved && !error && (
+        {!saving && (
           <span className="text-muted/60">Arraste as categorias para definir a ordem no catálogo</span>
         )}
       </div>

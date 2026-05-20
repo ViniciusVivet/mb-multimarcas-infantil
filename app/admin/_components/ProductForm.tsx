@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import type { Product } from "@/data/products";
 import { PhotoUploader } from "./PhotoUploader";
 import { ColorPicker } from "./ColorPicker";
+import { AdminNotice } from "./AdminNotice";
 
 type Props = {
   action: (prev: unknown, formData: FormData) => Promise<{ error?: string }>;
@@ -27,9 +29,22 @@ function SubmitButton({ label }: { label: string }) {
 
 export function ProductForm({ action, categories, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
+  const [dismissedError, setDismissedError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setDismissedError(null);
+  }, [state?.error]);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
+      <AdminNotice
+        open={!!state?.error && dismissedError !== state.error}
+        title="Não consegui salvar o produto"
+        message={state?.error}
+        variant="error"
+        onClose={() => setDismissedError(state?.error ?? null)}
+      />
+
       {/* Nome */}
       <div>
         <label className="mb-1.5 block text-sm font-semibold text-ink">Nome do produto *</label>
@@ -120,12 +135,6 @@ export function ProductForm({ action, categories, defaultValues, submitLabel }: 
           Suba o vídeo no YouTube (pode ser não listado) e cole o link aqui
         </p>
       </div>
-
-      {state?.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-          Erro: {state.error}
-        </p>
-      )}
 
       <SubmitButton label={submitLabel} />
     </form>

@@ -3,34 +3,26 @@
 import { useState } from "react";
 import { deletarProdutoAction } from "../actions";
 
-export function DeleteButton({ slug, name }: { slug: string; name: string }) {
+export function DeleteButton({
+  slug,
+  name,
+  onError,
+}: {
+  slug: string;
+  name: string;
+  onError?: (message: string) => void;
+}) {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function handleDelete() {
     setLoading(true);
-    setError(null);
     const result = await deletarProdutoAction(slug);
     if (result?.error) {
-      setError(result.error);
+      onError?.(result.error);
       setLoading(false);
       setConfirming(false);
     }
-  }
-
-  if (error) {
-    return (
-      <div className="w-full rounded-xl bg-red-50 px-3 py-2 text-center">
-        <p className="text-[10px] font-semibold text-red-600 leading-tight">{error}</p>
-        <button
-          onClick={() => setError(null)}
-          className="mt-1 text-[10px] text-muted underline"
-        >
-          Ok
-        </button>
-      </div>
-    );
   }
 
   if (confirming) {

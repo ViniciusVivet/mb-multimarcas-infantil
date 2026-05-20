@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { loginAction } from "./actions";
 import Image from "next/image";
+import { AdminNotice } from "./_components/AdminNotice";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -23,9 +25,22 @@ function wrappedLogin(_prev: unknown, formData: FormData) {
 
 export default function AdminLoginPage() {
   const [state, action] = useFormState(wrappedLogin, undefined);
+  const [dismissedError, setDismissedError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setDismissedError(null);
+  }, [state?.error]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
+      <AdminNotice
+        open={!!state?.error && dismissedError !== state.error}
+        title="Não consegui entrar"
+        message={state?.error}
+        variant="error"
+        onClose={() => setDismissedError(state?.error ?? null)}
+      />
+
       <div className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-soft">
         <div className="mb-6 flex justify-center">
           <Image src="/logo.jpg" alt="MB Multimarcas Infantil" width={80} height={80} className="rounded-2xl" />
@@ -48,12 +63,6 @@ export default function AdminLoginPage() {
               className="input w-full"
             />
           </div>
-
-          {state?.error && (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-              {state.error}
-            </p>
-          )}
 
           <SubmitButton />
         </form>
