@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/products-db";
-import { getSortedCategories } from "@/lib/categories-db";
+import { getAdminCategories } from "@/lib/categories-db";
 import { logoutAction } from "../actions";
 import { CategoryList } from "../_components/CategoryList";
 
@@ -9,7 +9,7 @@ export const revalidate = 0;
 
 export default async function CategoriasAdminPage() {
   const produtos = await getProducts();
-  const categories = await getSortedCategories(produtos);
+  const categories = await getAdminCategories(produtos);
 
   return (
     <div className="min-h-screen px-4 py-8 md:px-8">
@@ -36,15 +36,7 @@ export default async function CategoriasAdminPage() {
         </div>
       </div>
 
-      {categories.length === 0 ? (
-        <div className="rounded-3xl bg-white p-12 text-center shadow-soft">
-          <p className="text-4xl">🏷️</p>
-          <p className="mt-3 font-bold text-ink">Nenhuma categoria ainda</p>
-          <p className="mt-1 text-sm text-muted">Cadastre produtos para as categorias aparecerem aqui.</p>
-        </div>
-      ) : (
-        <CategoryList categories={categories} />
-      )}
+      <CategoryList categories={categories} />
     </div>
   );
 }

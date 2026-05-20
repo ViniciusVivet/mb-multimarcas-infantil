@@ -9,6 +9,7 @@ import { ColorPicker } from "./ColorPicker";
 
 type Props = {
   action: (prev: unknown, formData: FormData) => Promise<{ error?: string }>;
+  categories: string[];
   defaultValues?: Partial<Product>;
   submitLabel: string;
 };
@@ -27,12 +28,7 @@ function SubmitButton({ label, uploading }: { label: string; uploading: boolean 
   );
 }
 
-const categories = [
-  "Vestidos", "Conjuntos", "Camisetas", "Calças",
-  "Macacões", "Acessórios", "Casacos", "Shorts",
-];
-
-export function ProductFormWithPreview({ action, defaultValues, submitLabel }: Props) {
+export function ProductFormWithPreview({ action, categories, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState({

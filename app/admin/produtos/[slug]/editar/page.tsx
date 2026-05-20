@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/products-db";
+import { getProducts } from "@/lib/products-db";
+import { getAdminCategories } from "@/lib/categories-db";
 import { ProductFormWithPreview } from "../../../_components/ProductFormWithPreview";
 import { atualizarProdutoAction } from "../../../actions";
 
@@ -10,8 +12,9 @@ export default async function EditarProdutoPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const produto = await getProductBySlug(slug);
+  const [produto, products] = await Promise.all([getProductBySlug(slug), getProducts()]);
   if (!produto) notFound();
+  const categories = await getAdminCategories(products);
 
   const action = atualizarProdutoAction.bind(null, slug);
 
@@ -31,6 +34,7 @@ export default async function EditarProdutoPage({
           </p>
           <ProductFormWithPreview
             action={action}
+            categories={categories}
             defaultValues={produto}
             submitLabel="Salvar alterações"
           />

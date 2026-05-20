@@ -5,8 +5,13 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createProduct, updateProduct, deleteProduct, updatePositions } from "@/lib/products-db";
-import { updateCategoryPositions } from "@/lib/categories-db";
+import {
+  createCategory,
+  deleteCategory,
+  updateCategoryPositions,
+} from "@/lib/categories-db";
 import { uploadProductImage } from "@/lib/storage";
+import { getProducts } from "@/lib/products-db";
 
 // ── Auth ────────────────────────────────────────────────────────────────────
 
@@ -219,5 +224,31 @@ export async function updateCategoryPositionsAction(
   if (!result.ok) return { error: result.error };
   revalidatePath("/");
   revalidatePath("/admin/categorias");
+  return {};
+}
+
+export async function createCategoryAction(formData: FormData): Promise<{ error?: string }> {
+  const authError = await getAdminAuthError();
+  if (authError) return { error: authError };
+
+  const name = formData.get("name") as string;
+  const result = await createCategory(name);
+  if (!result.ok) return { error: result.error };
+  revalidatePath("/");
+  revalidatePath("/admin/categorias");
+  revalidatePath("/admin/produtos/novo");
+  return {};
+}
+
+export async function deleteCategoryAction(name: string): Promise<{ error?: string }> {
+  const authError = await getAdminAuthError();
+  if (authError) return { error: authError };
+
+  const products = await getProducts();
+  const result = await deleteCategory(name, products);
+  if (!result.ok) return { error: result.error };
+  revalidatePath("/");
+  revalidatePath("/admin/categorias");
+  revalidatePath("/admin/produtos/novo");
   return {};
 }

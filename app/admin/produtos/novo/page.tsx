@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { ProductFormWithPreview } from "../../_components/ProductFormWithPreview";
 import { criarProdutoAction } from "../../actions";
+import { getProducts } from "@/lib/products-db";
+import { getAdminCategories } from "@/lib/categories-db";
 
-export default function NovoProdutoPage() {
+export default async function NovoProdutoPage() {
+  const products = await getProducts();
+  const categories = await getAdminCategories(products);
+
   return (
     <div className="min-h-screen px-4 py-8 md:px-8">
       <div className="mx-auto max-w-5xl">
@@ -14,7 +19,11 @@ export default function NovoProdutoPage() {
         </div>
 
         <div className="rounded-3xl bg-white p-6 shadow-soft">
-          <ProductFormWithPreview action={criarProdutoAction} submitLabel="Criar produto" />
+          <ProductFormWithPreview
+            action={criarProdutoAction}
+            categories={categories}
+            submitLabel="Criar produto"
+          />
         </div>
       </div>
     </div>

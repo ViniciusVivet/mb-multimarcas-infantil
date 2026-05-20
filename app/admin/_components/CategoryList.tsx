@@ -16,7 +16,12 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { updateCategoryPositionsAction } from "../actions";
+import {
+  createCategoryAction,
+  deleteCategoryAction,
+  updateCategoryPositionsAction,
+} from "../actions";
+import { defaultCategories } from "@/lib/categories-db";
 
 const categoryEmojis: Record<string, string> = {
   Vestidos: "👗",
@@ -30,9 +35,21 @@ const categoryEmojis: Record<string, string> = {
   Casacos: "🧥",
   Shorts: "🩳",
   "Acessórios": "✨",
+  Calçados: "👟",
+  Havaianas: "🩴",
 };
 
-function SortableRow({ name, index }: { name: string; index: number }) {
+function SortableRow({
+  name,
+  index,
+  canDelete,
+  onDelete,
+}: {
+  name: string;
+  index: number;
+  canDelete: boolean;
+  onDelete: (name: string) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: name });
 
@@ -50,6 +67,15 @@ function SortableRow({ name, index }: { name: string; index: number }) {
       <span className="w-6 text-center text-sm font-black text-muted/50">{index + 1}</span>
       <span className="text-xl">{categoryEmojis[name] ?? "🏷️"}</span>
       <span className="flex-1 font-bold text-ink">{name}</span>
+      {canDelete ? (
+        <button
+          type="button"
+          onClick={() => onDelete(name)}
+          className="rounded-lg px-3 py-2 text-xs font-bold text-red-500 hover:bg-red-50"
+        >
+          Excluir
+        </button>
+      ) : null}
       <div
         {...attributes}
         {...listeners}
@@ -71,6 +97,7 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [newCategory, setNewCategory] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -100,8 +127,74 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
     }
   }
 
+  async function handleCreateCategory() {
+    const name = newCategory.trim().replace(/\s+/g, " ");
+    if (!name) return;
+
+    setSaving(true);
+    setSaved(false);
+    setError(null);
+    const formData = new FormData();
+    formData.set("name", name);
+    const result = await createCategoryAction(formData);
+    setSaving(false);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+    setCategories((current) => (current.includes(name) ? current : [...current, name]));
+    setNewCategory("");
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
+  async function handleDeleteCategory(name: string) {
+    if (!window.confirm(`Excluir a categoria "${name}"?`)) return;
+
+    setSaving(true);
+    setSaved(false);
+    setError(null);
+    const result = await deleteCategoryAction(name);
+    setSaving(false);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+    setCategories((current) => current.filter((category) => category !== name));
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
   return (
     <div>
+      <div className="mb-5 rounded-3xl bg-white p-4 shadow-soft">
+        <label className="mb-2 block text-sm font-bold text-ink">Adicionar categoria</label>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            value={newCategory}
+            onChange={(event) => setNewCategory(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                handleCreateCategory();
+              }
+            }}
+            placeholder="Ex: Calçados, Havaianas, Outlet"
+            className="input min-w-0 flex-1"
+          />
+          <button
+            type="button"
+            onClick={handleCreateCategory}
+            className="button button-primary px-4 py-3 text-sm"
+          >
+            Adicionar
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Depois de adicionar, a categoria aparece no cadastro e edição de produtos.
+        </p>
+      </div>
+
       <div className="mb-4 flex items-center gap-2 text-xs font-semibold">
         {saving && <span className="text-muted">Salvando ordem...</span>}
         {saved && <span className="text-mint">Ordem salva!</span>}
@@ -115,7 +208,13 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
         <SortableContext items={categories} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-2">
             {categories.map((cat, i) => (
-              <SortableRow key={cat} name={cat} index={i} />
+              <SortableRow
+                key={cat}
+                name={cat}
+                index={i}
+                canDelete={!defaultCategories.includes(cat)}
+                onDelete={handleDeleteCategory}
+              />
             ))}
           </div>
         </SortableContext>

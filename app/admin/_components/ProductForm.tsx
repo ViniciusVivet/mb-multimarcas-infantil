@@ -7,6 +7,7 @@ import { ColorPicker } from "./ColorPicker";
 
 type Props = {
   action: (prev: unknown, formData: FormData) => Promise<{ error?: string }>;
+  categories: string[];
   defaultValues?: Partial<Product>;
   submitLabel: string;
 };
@@ -24,12 +25,7 @@ function SubmitButton({ label }: { label: string }) {
   );
 }
 
-const categories = [
-  "Vestidos", "Conjuntos", "Camisetas", "Calças",
-  "Macacões", "Acessórios", "Casacos", "Shorts",
-];
-
-export function ProductForm({ action, defaultValues, submitLabel }: Props) {
+export function ProductForm({ action, categories, defaultValues, submitLabel }: Props) {
   const [state, formAction] = useFormState(action, undefined);
 
   return (
