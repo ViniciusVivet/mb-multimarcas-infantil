@@ -13,6 +13,7 @@ export const defaultCategories = [
   "Shorts",
   "Calçados",
   "Havaianas",
+  "Body temático",
 ];
 
 export function getUniqueCategories(products: Product[]): string[] {

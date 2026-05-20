@@ -38,6 +38,7 @@ const categoryEmojis: Record<string, string> = {
   "Acessórios": "✨",
   Calçados: "👟",
   Havaianas: "🩴",
+  "Body temático": "⭐",
 };
 
 function SortableRow({
