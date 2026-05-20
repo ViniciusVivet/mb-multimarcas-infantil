@@ -15,7 +15,7 @@ type Props = {
 
 const styles: Record<NoticeVariant, { icon: string; border: string; bg: string; title: string }> = {
   success: {
-    icon: "✓",
+    icon: "OK",
     border: "border-mint/40",
     bg: "bg-mint/10",
     title: "text-mint",
@@ -70,7 +70,7 @@ export function AdminNotice({
           className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-lg font-black leading-none text-red-500 transition-colors hover:bg-red-100"
           aria-label="Fechar aviso"
         >
-          ×
+          x
         </button>
       </div>
     </div>

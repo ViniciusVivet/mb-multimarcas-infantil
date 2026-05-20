@@ -1,5 +1,6 @@
 import { getSupabaseClient } from "./supabase";
 import type { Product } from "@/data/products";
+import { friendlyAdminError } from "./admin-errors";
 
 export const defaultCategories = [
   "Vestidos",
@@ -78,7 +79,7 @@ export async function createCategory(
       { name: normalized, position: position ?? 999 },
       { onConflict: "name" }
     );
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyAdminError("Não consegui salvar essa categoria") };
   return { ok: true };
 }
 
@@ -97,7 +98,7 @@ export async function deleteCategory(
   }
 
   const { error } = await db.from("categorias").delete().eq("name", name);
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyAdminError("Não consegui excluir essa categoria") };
   return { ok: true };
 }
 
@@ -109,6 +110,6 @@ export async function updateCategoryPositions(
 
   const rows = names.map((name, i) => ({ name, position: i }));
   const { error } = await db.from("categorias").upsert(rows, { onConflict: "name" });
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyAdminError("Não consegui salvar a ordem das categorias") };
   return { ok: true };
 }

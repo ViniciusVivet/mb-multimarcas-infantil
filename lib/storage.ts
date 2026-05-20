@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "./supabase";
+import { friendlyAdminError } from "./admin-errors";
 
 const allowedImageTypes: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -28,7 +29,7 @@ export async function uploadProductImage(
     .from("produtos")
     .upload(path, file, { cacheControl: "3600", upsert: false });
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyAdminError("Não consegui enviar essa foto") };
 
   const { data } = db.storage.from("produtos").getPublicUrl(path);
   return { url: data.publicUrl };

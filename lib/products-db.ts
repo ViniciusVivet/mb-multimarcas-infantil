@@ -1,5 +1,6 @@
 import { products as staticProducts, type Product } from "@/data/products";
 import { getSupabaseClient } from "./supabase";
+import { friendlyAdminError } from "./admin-errors";
 
 export function slugify(name: string) {
   return name
@@ -40,7 +41,7 @@ export async function updatePositions(slugs: string[]): Promise<{ ok: boolean; e
   if (!db) return { ok: false, error: "Banco de dados não configurado." };
   for (let i = 0; i < slugs.length; i++) {
     const { error } = await db.from("produtos").update({ position: i }).eq("slug", slugs[i]);
-    if (error) return { ok: false, error: error.message };
+    if (error) return { ok: false, error: friendlyAdminError("Não consegui salvar a ordem dos produtos") };
   }
   return { ok: true };
 }
@@ -64,7 +65,7 @@ export async function createProduct(
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
   const slug = slugify(input.name);
   const { error } = await db.from("produtos").insert({ ...input, slug });
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyAdminError("Não consegui criar esse produto") };
   return { ok: true, slug };
 }
 
@@ -75,7 +76,7 @@ export async function updateProduct(
   const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
   const { error } = await db.from("produtos").upsert({ slug, ...input }, { onConflict: "slug" });
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyAdminError("Não consegui salvar as alterações desse produto") };
   return { ok: true };
 }
 
@@ -83,7 +84,7 @@ export async function deleteProduct(slug: string): Promise<{ ok: boolean; error?
   const db = getSupabaseClient({ requireServiceRole: true });
   if (!db) return { ok: false, error: "Banco de dados não configurado. Veja ADMIN_SETUP.md." };
   const { error, count } = await db.from("produtos").delete({ count: "exact" }).eq("slug", slug);
-  if (error) return { ok: false, error: error.message };
+  if (error) return { ok: false, error: friendlyAdminError("Não consegui excluir esse produto") };
   if (count === 0) return { ok: false, error: "Produto não encontrado no banco. Edite e salve ele primeiro para migrá-lo." };
   return { ok: true };
 }

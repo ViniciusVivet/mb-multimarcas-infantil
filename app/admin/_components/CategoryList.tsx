@@ -51,6 +51,7 @@ function SortableRow({
   canDelete: boolean;
   onDelete: (name: string) => void;
 }) {
+  const [confirming, setConfirming] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: name });
 
@@ -69,13 +70,35 @@ function SortableRow({
       <span className="text-xl">{categoryEmojis[name] ?? "🏷️"}</span>
       <span className="flex-1 font-bold text-ink">{name}</span>
       {canDelete ? (
-        <button
-          type="button"
-          onClick={() => onDelete(name)}
-          className="rounded-lg px-3 py-2 text-xs font-bold text-red-500 hover:bg-red-50"
-        >
-          Excluir
-        </button>
+        confirming ? (
+          <div className="flex gap-1">
+            <button
+              type="button"
+              onClick={() => setConfirming(false)}
+              className="rounded-lg bg-paper px-3 py-2 text-xs font-bold text-muted hover:bg-line"
+            >
+              Manter
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setConfirming(false);
+                onDelete(name);
+              }}
+              className="rounded-lg bg-red-500 px-3 py-2 text-xs font-bold text-white hover:bg-red-600"
+            >
+              Apagar
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setConfirming(true)}
+            className="rounded-lg px-3 py-2 text-xs font-bold text-red-500 hover:bg-red-50"
+          >
+            Excluir
+          </button>
+        )
       ) : null}
       <div
         {...attributes}
@@ -165,8 +188,6 @@ export function CategoryList({ categories: initial }: { categories: string[] }) 
   }
 
   async function handleDeleteCategory(name: string) {
-    if (!window.confirm(`Excluir a categoria "${name}"?`)) return;
-
     setSaving(true);
     setNotice(null);
     const result = await deleteCategoryAction(name);
