@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Product } from "@/data/products";
 import { getWhatsappLink } from "@/data/store";
 import { parseProductColor } from "@/lib/product-colors";
@@ -15,11 +16,13 @@ export function ProductActions({ product }: { product: Product }) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const colors = product.colors ?? [];
   const needsColor = colors.length > 0;
   const canContact = !!selectedSize && (!needsColor || !!selectedColor);
+  const canCheckout = canContact && acceptedTerms;
 
   const link = getWhatsappLink(
     product.name,
@@ -28,7 +31,7 @@ export function ProductActions({ product }: { product: Product }) {
   );
 
   async function startCheckout() {
-    if (!canContact || checkoutLoading) return;
+    if (!canCheckout || checkoutLoading) return;
 
     setCheckoutLoading(true);
     setCheckoutError(null);
@@ -159,6 +162,30 @@ export function ProductActions({ product }: { product: Product }) {
         </p>
       </div>
 
+      <label className="mt-4 flex cursor-pointer gap-3 rounded-2xl border-2 border-line bg-paper px-4 py-3 text-sm font-semibold leading-6 text-muted">
+        <input
+          type="checkbox"
+          checked={acceptedTerms}
+          onChange={(event) => setAcceptedTerms(event.target.checked)}
+          className="mt-1 h-4 w-4 flex-shrink-0 accent-coral"
+        />
+        <span>
+          Li e aceito os{" "}
+          <Link href="/termos" className="font-extrabold text-coral hover:underline" target="_blank">
+            Termos de Compra
+          </Link>
+          , a{" "}
+          <Link href="/privacidade" className="font-extrabold text-coral hover:underline" target="_blank">
+            Politica de Privacidade
+          </Link>{" "}
+          e a politica de{" "}
+          <Link href="/trocas-devolucoes" className="font-extrabold text-coral hover:underline" target="_blank">
+            Trocas e Devolucoes
+          </Link>
+          .
+        </span>
+      </label>
+
       {checkoutError ? (
         <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
           <p className="text-sm font-bold text-red-600">{checkoutError}</p>
@@ -170,12 +197,12 @@ export function ProductActions({ product }: { product: Product }) {
         <button
           type="button"
           onClick={startCheckout}
-          disabled={!canContact || checkoutLoading}
+          disabled={!canCheckout || checkoutLoading}
           className={`button w-full justify-center gap-2 text-base ${
-            canContact ? "button-primary" : "button-secondary opacity-60"
+            canCheckout ? "button-primary" : "button-secondary opacity-60"
           }`}
         >
-          {checkoutLoading ? "Abrindo pagamento..." : canContact ? "Comprar agora" : needsColor ? "Selecione tamanho e cor" : "Selecione um tamanho"}
+          {checkoutLoading ? "Abrindo pagamento..." : canCheckout ? "Comprar agora" : !canContact ? (needsColor ? "Selecione tamanho e cor" : "Selecione um tamanho") : "Aceite os termos para comprar"}
         </button>
         <a
           className={`button w-full justify-center gap-2 text-base ${
@@ -200,12 +227,12 @@ export function ProductActions({ product }: { product: Product }) {
           <button
             type="button"
             onClick={startCheckout}
-            disabled={!canContact || checkoutLoading}
+            disabled={!canCheckout || checkoutLoading}
             className={`button w-full justify-center px-3 text-sm ${
-              canContact ? "button-primary" : "button-secondary opacity-60"
+              canCheckout ? "button-primary" : "button-secondary opacity-60"
             }`}
           >
-            {checkoutLoading ? "Abrindo..." : canContact ? "Comprar" : "Selecione"}
+            {checkoutLoading ? "Abrindo..." : canCheckout ? "Comprar" : "Aceite"}
           </button>
           <a
             className={`button w-full justify-center gap-1 px-3 text-sm ${

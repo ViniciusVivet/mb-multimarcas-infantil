@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { store } from "@/data/store";
 
 export function Footer() {
@@ -17,13 +18,13 @@ export function Footer() {
           </div>
           <div>
             <p className="font-black text-sm">{store.name}</p>
-            <p className="text-xs text-white/50 font-semibold">Moda infantil com carinho ❤️</p>
+            <p className="text-xs text-white/50 font-semibold">Moda infantil com carinho</p>
           </div>
         </div>
 
         <div className="flex flex-col gap-1 sm:text-right">
           <a href={store.instagram} target="_blank" rel="noreferrer" className="text-sm text-white/70 hover:text-white transition-colors font-semibold">
-            📸 @mb.multimarcas_infantil
+            @mb.multimarcas_infantil
           </a>
           <a
             href={`https://wa.me/${store.whatsapp}`}
@@ -31,12 +32,23 @@ export function Footer() {
             rel="noreferrer"
             className="text-sm text-white/70 hover:text-white transition-colors font-semibold"
           >
-            💬 (11) 98601-3153
+            {store.whatsappLabel}
           </a>
         </div>
       </div>
 
       <div className="mt-6 border-t border-white/10 pt-5 text-center text-xs text-white/30 font-semibold">
+        <div className="mb-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
+          <Link href="/privacidade" className="hover:text-white transition-colors">
+            Politica de Privacidade
+          </Link>
+          <Link href="/termos" className="hover:text-white transition-colors">
+            Termos de Compra
+          </Link>
+          <Link href="/trocas-devolucoes" className="hover:text-white transition-colors">
+            Trocas e Devolucoes
+          </Link>
+        </div>
         © {new Date().getFullYear()} MB Multimarcas Infantil · Todos os direitos reservados
       </div>
     </footer>

@@ -2,7 +2,21 @@ export const store = {
   name: "MB Multimarcas Infantil",
   instagram: "https://www.instagram.com/mb.multimarcas_infantil/",
   whatsapp: "5511986013153",
+  whatsappLabel: "(11) 98601-3153",
+  email: "",
+  document: "",
+  address: {
+    street: "Rua Benigno Nogueira Franco, 181",
+    district: "Jardim das Oliveiras",
+    city: "Sao Paulo",
+    state: "SP",
+  },
 };
+
+export function getStoreAddress() {
+  const { street, district, city, state } = store.address;
+  return `${street}, ${district}, ${city} - ${state}`;
+}
 
 export function getWhatsappLink(productName?: string, size?: string, color?: string) {
   let message: string;
