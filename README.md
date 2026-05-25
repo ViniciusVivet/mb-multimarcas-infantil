@@ -25,21 +25,34 @@ Troque o WhatsApp usando `55 + DDD + numero`, apenas numeros:
 whatsapp: "5500000000000",
 ```
 
-## Painel admin (gerenciar produtos)
+## Painel admin
 
-Acesse `/admin` no site e faça login com a senha configurada em `ADMIN_PASSWORD`.
+Acesse `/admin` no site e faca login com a senha configurada em `ADMIN_PASSWORD`.
 
 Para ativar o banco de dados e o painel, siga o `ADMIN_SETUP.md`.
 
-## Variáveis de ambiente
+## Variaveis de ambiente
 
-| Variável | Descrição |
+| Variavel | Descricao |
 |----------|-----------|
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
 | `SUPABASE_SERVICE_KEY` | Chave service_role do Supabase |
 | `ADMIN_PASSWORD` | Senha de acesso ao painel admin |
+| `MERCADO_PAGO_ACCESS_TOKEN` | Access Token de producao do Mercado Pago |
+| `NEXT_PUBLIC_SITE_URL` | URL publica do site para retornos e webhook |
 
-Sem essas variáveis o site funciona normalmente com os produtos estáticos, mas o painel admin não salva.
+Sem Supabase configurado, o site funciona com produtos estaticos, mas admin, pedidos e pagamentos nao salvam.
+
+## Pagamentos
+
+O checkout usa Mercado Pago Checkout Pro redirecionado. O site cria o pedido, envia o cliente ao Mercado Pago e recebe a confirmacao pelo webhook.
+
+Antes de ativar em producao:
+
+1. Execute `SUPABASE_PAYMENTS.sql` no SQL Editor do Supabase.
+2. Configure `MERCADO_PAGO_ACCESS_TOKEN` na Vercel.
+3. Configure `NEXT_PUBLIC_SITE_URL` com o dominio final do site.
+4. Faca uma compra teste de baixo valor e confira `/admin/pedidos`.
 
 ## Deploy
 

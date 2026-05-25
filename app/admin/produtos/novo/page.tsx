@@ -4,6 +4,8 @@ import { criarProdutoAction } from "../../actions";
 import { getProducts } from "@/lib/products-db";
 import { getAdminCategories } from "@/lib/categories-db";
 
+export const dynamic = "force-dynamic";
+
 export default async function NovoProdutoPage() {
   const products = await getProducts();
   const categories = await getAdminCategories(products);

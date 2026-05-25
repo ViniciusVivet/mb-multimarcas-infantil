@@ -6,6 +6,8 @@ import { getAdminCategories } from "@/lib/categories-db";
 import { ProductFormWithPreview } from "../../../_components/ProductFormWithPreview";
 import { atualizarProdutoAction } from "../../../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditarProdutoPage({
   params,
 }: {
