@@ -42,7 +42,7 @@ export default function TrocasDevolucoesPage() {
         {
           title: "Reembolso",
           paragraphs: [
-            `Quando aplicavel, o reembolso seguira o metodo e os prazos do ${legalInfo.paymentProvider} e/ou das instituicoes financeiras envolvidas.`,
+            "Quando aplicavel, o reembolso seguira a forma de pagamento combinada com a loja e os prazos das instituicoes financeiras envolvidas.",
           ],
         },
         {

@@ -28,15 +28,9 @@ export default function PrivacidadePage() {
           items: privacyPurposes,
         },
         {
-          title: "Pagamento",
-          paragraphs: [
-            `Os pagamentos sao processados pelo ${legalInfo.paymentProvider}. O site nao armazena numero de cartao, codigo de seguranca ou senha bancaria. O ${legalInfo.paymentProvider} pode tratar dados de pagamento conforme as proprias politicas e regras de seguranca.`,
-          ],
-        },
-        {
           title: "Compartilhamento",
           paragraphs: [
-            `Podemos compartilhar dados apenas quando necessario para operar o site, processar pagamentos, prestar atendimento, cumprir obrigacoes legais ou defender direitos. Hoje usamos servicos como ${legalInfo.dataProviders.join(", ")}.`,
+            `Podemos compartilhar dados apenas quando necessario para operar o site, prestar atendimento, cumprir obrigacoes legais ou defender direitos. Hoje usamos servicos como ${legalInfo.dataProviders.join(", ")}.`,
           ],
         },
         {
@@ -54,7 +48,7 @@ export default function PrivacidadePage() {
         {
           title: "Seguranca",
           paragraphs: [
-            "Adotamos medidas tecnicas e administrativas razoaveis para proteger os dados. Mesmo assim, nenhum sistema e totalmente livre de riscos, por isso as credenciais de acesso e chaves de pagamento devem ser mantidas em sigilo.",
+            "Adotamos medidas tecnicas e administrativas razoaveis para proteger os dados. Mesmo assim, nenhum sistema e totalmente livre de riscos, por isso as credenciais de acesso devem ser mantidas em sigilo.",
           ],
         },
       ]}

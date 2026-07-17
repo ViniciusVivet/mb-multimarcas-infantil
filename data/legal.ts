@@ -7,19 +7,17 @@ export const legalInfo = {
   whatsapp: store.whatsappLabel,
   address: getStoreAddress(),
   lastUpdated: "25 de maio de 2026",
-  paymentProvider: "Mercado Pago",
-  dataProviders: ["Vercel", "Supabase", "Mercado Pago"],
+  dataProviders: ["Vercel", "Supabase", "WhatsApp"],
 };
 
 export const privacyDataItems = [
-  "dados do pedido, como produto, tamanho, cor, quantidade, valor e status do pagamento",
+  "dados da consulta, como produto, tamanho, cor e quantidade escolhidos",
   "dados de contato enviados pelo cliente no atendimento, como WhatsApp e mensagens",
-  "dados recebidos do Mercado Pago para confirmar o pagamento, como identificador do pagamento e e-mail do pagador",
   "dados tecnicos de acesso necessarios para seguranca, funcionamento e prevencao de fraude",
 ];
 
 export const privacyPurposes = [
-  "processar pedidos e pagamentos",
+  "atender consultas e organizar pedidos pelo WhatsApp",
   "confirmar disponibilidade, entrega, retirada, troca ou devolucao",
   "prestar atendimento ao cliente",
   "cumprir obrigacoes legais, fiscais, regulatórias e de defesa em eventual disputa",

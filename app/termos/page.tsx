@@ -11,7 +11,7 @@ export default function TermosPage() {
   return (
     <LegalPage
       title="Termos de Compra"
-      description={`Ultima atualizacao: ${legalInfo.lastUpdated}. Estes termos explicam as regras basicas para comprar no site da ${legalInfo.storeName}.`}
+      description={`Ultima atualizacao: ${legalInfo.lastUpdated}. Estes termos explicam como funciona a consulta de produtos e o atendimento da ${legalInfo.storeName}.`}
       sections={[
         {
           title: "Identificacao da loja",
@@ -22,14 +22,14 @@ export default function TermosPage() {
         {
           title: "Produtos e disponibilidade",
           paragraphs: [
-            "O site apresenta produtos, tamanhos, cores e precos disponiveis para compra ou consulta. A confirmacao final do pedido depende da aprovacao do pagamento e da disponibilidade operacional da loja.",
+            "O site apresenta produtos, tamanhos, cores e precos para consulta. A disponibilidade e a confirmacao final do pedido sao feitas diretamente com a loja pelo WhatsApp.",
             "Imagens podem ter pequenas variacoes de cor conforme tela, iluminacao e lote do produto.",
           ],
         },
         {
-          title: "Pagamento",
+          title: "Atendimento e pagamento",
           paragraphs: [
-            `O pagamento online e processado pelo ${legalInfo.paymentProvider}. Ao clicar em comprar, o cliente e direcionado ao ambiente seguro de pagamento. O pedido e considerado confirmado apos aprovacao do pagamento.`,
+            "O site nao processa pagamentos. As formas e condicoes de pagamento sao informadas pela loja durante o atendimento no WhatsApp.",
           ],
         },
         {

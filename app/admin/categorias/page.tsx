@@ -25,9 +25,6 @@ export default async function CategoriasAdminPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/pedidos" className="button button-secondary px-4 py-2 text-sm">
-            Pedidos
-          </Link>
           <Link href="/admin/produtos" className="button button-secondary px-4 py-2 text-sm">
             Produtos
           </Link>
