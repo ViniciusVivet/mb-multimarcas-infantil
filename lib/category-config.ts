@@ -10,6 +10,7 @@ export const defaultCategories = [
   "Calçados",
   "Havaianas",
   "Body temático",
+  "T-shirt / Blusinha",
 ];
 
 export const categoryEmojis: Record<string, string> = {
@@ -27,6 +28,7 @@ export const categoryEmojis: Record<string, string> = {
   Calçados: "👟",
   Havaianas: "🩴",
   "Body temático": "⭐",
+  "T-shirt / Blusinha": "👕",
 };
 
 export function normalizeCategoryKey(name: string) {
