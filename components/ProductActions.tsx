@@ -30,7 +30,7 @@ export function ProductActions({ product }: { product: Product }) {
     ? "Escolha um tamanho"
     : needsColor && !selectedColor
       ? "Escolha uma cor"
-      : "Continuar pedido no WhatsApp";
+      : "Finalizar pedido pelo WhatsApp";
 
   return (
     <>
@@ -122,7 +122,7 @@ export function ProductActions({ product }: { product: Product }) {
 
       <div className="mt-4 rounded-2xl border border-mint/30 bg-mint/10 px-4 py-3">
         <p className="text-sm font-semibold text-mint">
-          Suas escolhas serão enviadas prontinhas para a loja confirmar a disponibilidade e combinar a entrega.
+          Você será direcionado(a) ao WhatsApp da loja para confirmar os detalhes e finalizar seu pedido.
         </p>
       </div>
 
@@ -137,7 +137,7 @@ export function ProductActions({ product }: { product: Product }) {
           aria-disabled={!readyToOrder}
         >
           {whatsappIcon}
-          {readyToOrder ? "Continuar pedido no WhatsApp" : pendingLabel}
+          {readyToOrder ? "Finalizar pedido pelo WhatsApp" : pendingLabel}
         </a>
         <p className="mt-2 text-center text-xs font-semibold text-muted">
           A mensagem já vai com produto, tamanho, cor e quantidade.
@@ -158,7 +158,7 @@ export function ProductActions({ product }: { product: Product }) {
           aria-disabled={!readyToOrder}
         >
           {whatsappIcon}
-          {readyToOrder ? "Continuar pedido no WhatsApp" : pendingLabel}
+          {readyToOrder ? "Finalizar pedido pelo WhatsApp" : pendingLabel}
         </a>
       </div>
     </>
