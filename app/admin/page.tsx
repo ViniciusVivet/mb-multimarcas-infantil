@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { loginAction } from "./actions";
 import Image from "next/image";
 import { AdminNotice } from "./_components/AdminNotice";
+import { portfolioMode } from "@/lib/portfolio-mode";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -30,6 +31,23 @@ export default function AdminLoginPage() {
   useEffect(() => {
     setDismissedError(null);
   }, [state?.error]);
+
+  if (portfolioMode) {
+    return (
+      <main className="flex min-h-screen items-center justify-center px-4">
+        <div className="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-soft">
+          <div className="mb-6 flex justify-center">
+            <Image src="/logo.jpg" alt="MB Multimarcas Infantil" width={80} height={80} className="rounded-2xl" />
+          </div>
+          <h1 className="mb-3 text-xl font-black text-ink">Acesso ao painel suspenso</h1>
+          <p className="text-sm leading-6 text-muted">
+            Para regularizar o pagamento e reativar o acesso ao painel administrativo,
+            entre em contato com o responsável pelo projeto.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">

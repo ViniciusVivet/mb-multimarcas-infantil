@@ -29,6 +29,11 @@ whatsapp: "5500000000000",
 
 Acesse `/admin` no site e faca login com a senha configurada em `ADMIN_PASSWORD`.
 
+Enquanto `portfolioMode` estiver `true` em `lib/portfolio-mode.ts`, o site mostra
+os produtos de exemplo e o painel fica suspenso, inclusive para sessões já abertas.
+Para restaurar os produtos do Supabase e o login, altere para `false` e publique
+novamente. Os registros do Supabase não são modificados pelo modo portfólio.
+
 Para ativar o banco de dados e o painel, siga o `ADMIN_SETUP.md`.
 
 ## Variaveis de ambiente

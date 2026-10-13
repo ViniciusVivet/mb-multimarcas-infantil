@@ -1,6 +1,7 @@
 import { products as staticProducts, type Product } from "@/data/products";
 import { getSupabaseClient } from "./supabase";
 import { friendlyAdminError } from "./admin-errors";
+import { portfolioMode } from "./portfolio-mode";
 
 export function slugify(name: string) {
   return name
@@ -13,6 +14,7 @@ export function slugify(name: string) {
 }
 
 export async function getProducts(): Promise<Product[]> {
+  if (portfolioMode) return staticProducts;
   const db = getSupabaseClient();
   if (!db) return staticProducts;
 
@@ -47,6 +49,7 @@ export async function updatePositions(slugs: string[]): Promise<{ ok: boolean; e
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
+  if (portfolioMode) return staticProducts.find((p) => p.slug === slug) ?? null;
   const db = getSupabaseClient();
   if (!db) return staticProducts.find((p) => p.slug === slug) ?? null;
   const { data, error } = await db.from("produtos").select("*").eq("slug", slug).limit(1);

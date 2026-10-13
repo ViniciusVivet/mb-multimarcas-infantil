@@ -12,6 +12,7 @@ import {
 } from "@/lib/categories-db";
 import { uploadProductImage } from "@/lib/storage";
 import { getProducts } from "@/lib/products-db";
+import { portfolioMode } from "@/lib/portfolio-mode";
 
 // ── Auth ────────────────────────────────────────────────────────────────────
 
@@ -63,6 +64,7 @@ function clearFailedLogins(key: string) {
 }
 
 async function getAdminAuthError() {
+  if (portfolioMode) return "Acesso ao painel suspenso. Regularize o pagamento para reativá-lo.";
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) return "ADMIN_PASSWORD não configurado no servidor.";
 
@@ -75,6 +77,9 @@ async function getAdminAuthError() {
 }
 
 export async function loginAction(formData: FormData) {
+  if (portfolioMode) {
+    return { error: "Acesso ao painel suspenso. Regularize o pagamento para reativá-lo." };
+  }
   const password = formData.get("password") as string;
   const adminPassword = process.env.ADMIN_PASSWORD;
   const requesterKey = await getRequesterKey();

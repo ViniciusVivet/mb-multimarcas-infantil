@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { portfolioMode } from "./lib/portfolio-mode";
 
 async function deriveSessionToken(password: string): Promise<string> {
   const enc = new TextEncoder();
@@ -18,6 +19,16 @@ async function deriveSessionToken(password: string): Promise<string> {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (portfolioMode) {
+    const response = pathname === "/admin"
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL("/admin", request.url));
+    response.cookies.delete("mb_admin_session");
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+    response.headers.set("Cache-Control", "no-store");
+    return response;
+  }
 
   const response = NextResponse.next();
   if (pathname.startsWith("/admin")) {
