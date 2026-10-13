@@ -34,6 +34,11 @@ os produtos de exemplo e o painel fica suspenso, inclusive para sessões já abe
 Para restaurar os produtos do Supabase e o login, altere para `false` e publique
 novamente. Os registros do Supabase não são modificados pelo modo portfólio.
 
+Durante o modo portfólio, `images.unoptimized: true` em `next.config.mjs` evita
+transformações de imagem da Vercel. As imagens locais grandes usadas na página
+foram convertidas para WebP. Ao reativar o catálogo, avalie tamanhos e formatos
+das fotos reais antes de remover essa opção; ela pode continuar desligada.
+
 Para ativar o banco de dados e o painel, siga o `ADMIN_SETUP.md`.
 
 ## Variaveis de ambiente

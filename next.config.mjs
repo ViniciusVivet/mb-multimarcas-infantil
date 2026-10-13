@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Modo portfólio: serve as imagens diretamente, sem transformações da Vercel.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

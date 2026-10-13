@@ -6,7 +6,7 @@ export function Contact() {
     <section id="contato" className="relative overflow-hidden px-5 py-16 sm:px-10 lg:px-16 lg:py-24" aria-labelledby="contato-title">
       {/* Pattern de fundo */}
       <Image
-        src="/pattern.png"
+        src="/pattern.webp"
         alt=""
         fill
         sizes="100vw"

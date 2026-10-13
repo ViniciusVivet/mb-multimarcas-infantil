@@ -5,7 +5,7 @@ export function Hero() {
   return (
     <section id="inicio" className="relative flex min-h-[26vh] items-end overflow-hidden md:min-h-[37vh]">
       <Image
-        src="/hero.png"
+        src="/hero.webp"
         alt="Crianças com roupas infantis coloridas"
         fill
         priority
